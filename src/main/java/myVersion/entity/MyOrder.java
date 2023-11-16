@@ -1,4 +1,4 @@
-package entity;
+package myVersion.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

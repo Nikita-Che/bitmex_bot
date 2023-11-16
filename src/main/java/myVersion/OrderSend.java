@@ -1,3 +1,5 @@
+package myVersion;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URI;
