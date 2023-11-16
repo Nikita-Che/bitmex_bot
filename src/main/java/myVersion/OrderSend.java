@@ -44,7 +44,7 @@ public class OrderSend {
                 "}";
 
         // Создаем HttpClient
-        HttpClient client = HttpClient.newHttpClient();
+        HttpClient client = HttpClient.newBuilder().build();
 
         long expires = System.currentTimeMillis() / 1000+5;
         // Создаем объект HttpRequest
