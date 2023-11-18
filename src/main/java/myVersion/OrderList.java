@@ -13,20 +13,43 @@ import java.security.NoSuchAlgorithmException;
 
 public class OrderList {
     public static void main(String[] args) throws IOException, InterruptedException {
+
+
+//        String orderID = placeOrder("XBTUSD", "Buy", 100, 36425);
+//        System.out.println(orderID);
+
+        getOrderList();
+//        postNewOrder();
+    }
+
+
+    private static void postNewOrder() throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newBuilder().build();
-        long expires = System.currentTimeMillis() / 1000+5;
+        long expires = System.currentTimeMillis() / 1000 + 5;
+//        String orderJson = placeOrder("XBTUSD", "Buy", 100, 36537);
+        String orderJson = "{\"symbol\":\"XBTUSD\",\"side\":\"Buy\",\"orderQty\":100,\"price\":36400,\"ordType\":\"Limit\"}";
         HttpRequest httpRequest = HttpRequest.newBuilder()
-//                .uri(URI.create("https://testnet.bitmex.com/api/v1/order"))
-                .uri(URI.create("https://testnet.bitmex.com/api/v1/order?count=10&reverse=false"))
+                .uri(URI.create("https://testnet.bitmex.com/api/v1/order"))
+                .header("Content-Type", "application/json")
                 .header("api-expires", String.valueOf(expires))
                 .header("api-key", "DI-FVmnjsNvWGcJLEyVxqncH")
-                .header("api-signature", generateSignature("bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v", "GET",
-                        "https://testnet.bitmex.com/api/v1/order?count=10&reverse=false", expires, "") )
+                .header("api-signature",
+                  generateSignature("bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v",
+                        "POST",
+                        "https://testnet.bitmex.com/api/v1/order",
+                        expires,
+                        orderJson))
+                .POST(HttpRequest.BodyPublishers.ofString(orderJson))
                 .build();
 
         HttpResponse<String> send = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(generateSignature("bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v",
+                "POST",
+                "https://testnet.bitmex.com/api/v1/order",
+                expires,
+                orderJson));
+        System.out.println(send.statusCode());
         System.out.println(send.body());
-
     }
 
     private static String generateSignature(String secret, String verb, String url, long expires, String data) {
@@ -49,7 +72,6 @@ public class OrderList {
         }
 
         String message = verb + path + expires + data;
-//        System.out.println("Вычисляем HMAC: " + message);
 
         String signature = "";
         try {
@@ -73,6 +95,32 @@ public class OrderList {
         }
 
         return signature;
+    }
+
+    private static String placeOrder(String symbol, String side, int qty, double price) {
+        String orderJson = String.format("{\"symbol\":\"%s\",\"side\":\"%s\",\"orderQty\":%d,\"price\":%f,\"ordType\":\"Limit\"}",
+                symbol, side, qty, price);
+        System.out.println(orderJson);
+        System.out.println("-------------------------------------");
+        return orderJson;
+    }
+
+    private static void getOrderList() throws IOException, InterruptedException {
+        HttpClient httpClient = HttpClient.newBuilder().build();
+        long expires = System.currentTimeMillis() / 1000 + 5;
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+//                .uri(URI.create("https://testnet.bitmex.com/api/v1/order"))
+                .uri(URI.create("https://testnet.bitmex.com/api/v1/order?count=10&reverse=false"))
+                .header("api-expires", String.valueOf(expires))
+                .header("api-key", "DI-FVmnjsNvWGcJLEyVxqncH")
+                .header("api-signature", generateSignature("bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v", "GET",
+                        "https://testnet.bitmex.com/api/v1/order?count=10&reverse=false", expires, ""))
+                .build();
+
+        HttpResponse<String> send = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(send.body());
+
+        System.out.println("-------------------------------------");
     }
 
 }
