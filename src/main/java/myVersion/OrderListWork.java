@@ -11,7 +11,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 
-public class OrderList {
+public class OrderListWork {
+    private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
     public static void main(String[] args) throws IOException, InterruptedException {
 
 
@@ -51,6 +52,8 @@ public class OrderList {
         System.out.println(send.statusCode());
         System.out.println(send.body());
     }
+
+
 
     private static String generateSignature(String secret, String verb, String url, long expires, String data) {
         String path = url;
