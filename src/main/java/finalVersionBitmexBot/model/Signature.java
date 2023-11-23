@@ -1,20 +1,13 @@
 package finalVersionBitmexBot.model;
 
+import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
+import finalVersionBitmexBot.model.order.Verb;
+
 public class Signature {
-    private final String apiSecret;
-    private final String verb;
-    private final String path;
-    private final long expires;
-    private final String data;
-
-    public Signature(String apiSecret, String verb, String path, long expires, String data) {
-        this.apiSecret = apiSecret;
-        this.verb = verb;
-        this.path = path;
-        this.expires = expires;
-        this.data = data;
-    }
-
-    public void generateSignature(String apiSecret, String verb, String path, long expires, String data) {
-    }
+    private AuthenticationHeaders apiSecret;
+    private Verb verb;
+    private String path;
+    private long expires;
+    private String data;
+    private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
 }

@@ -19,7 +19,7 @@ public class BitmexOrderOpenWork {
         String apiSecret = "bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v"; // Замените на ваш API-секрет BitMEX
 
         // Создание JSON-строки с данными для создания ордера
-        String orderJson = "{\"symbol\":\"XBTUSD\",\"side\":\"Buy\",\"orderQty\":100,\"price\":36000,\"ordType\":\"Limit\"}";
+        String orderJson = "{\"symbol\":\"XBTUSD\",\"side\":\"Buy\",\"orderQty\":100,\"price\":37000,\"ordType\":\"Limit\"}";
 
         try {
             long expires = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + 5;
