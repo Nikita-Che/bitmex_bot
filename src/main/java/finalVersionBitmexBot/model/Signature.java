@@ -1,11 +1,11 @@
 package finalVersionBitmexBot.model;
 
-import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
-import finalVersionBitmexBot.model.order.Verb;
+import lombok.Data;
 
+@Data
 public class Signature {
-    private AuthenticationHeaders apiSecret;
-    private Verb verb;
+    private String apiSecret;
+    private String verb;
     private String path;
     private long expires;
     private String data;

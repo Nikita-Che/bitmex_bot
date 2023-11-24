@@ -18,7 +18,7 @@ public class BitmexOrderCloseWork {
         String apiKey = "DI-FVmnjsNvWGcJLEyVxqncH"; // Ваш API-ключ BitMEX
         String verb = "DELETE"; // Метод DELETE для отмены ордера
         String path = "/api/v1/order"; // Путь для отмены ордера
-        String orderIdToClose = "139a12d4-cfa1-4d0e-bcbe-104b9326651e"; // ID открытого ордера, который требуется закрыть
+        String orderIdToClose = "6e34353c-c2e9-40a3-9c61-59831134753b"; // ID открытого ордера, который требуется закрыть
         System.out.println(orderIdToClose);
         long expires = System.currentTimeMillis() / 1000 + 5;
 

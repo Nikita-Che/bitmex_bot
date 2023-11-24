@@ -1,5 +1,8 @@
 package myVersion;
 
+import finalVersionBitmexBot.model.order.Order;
+import finalVersionBitmexBot.model.util.OrderParser;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
@@ -10,47 +13,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class OrderListWork {
     private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
+
     public static void main(String[] args) throws IOException, InterruptedException {
-
-
-//        String orderID = placeOrder("XBTUSD", "Buy", 100, 36425);
-//        System.out.println(orderID);
-
         getOrderList();
-//        postNewOrder();
-    }
-
-
-    private static void postNewOrder() throws IOException, InterruptedException {
-        HttpClient httpClient = HttpClient.newBuilder().build();
-        long expires = System.currentTimeMillis() / 1000 + 5;
-//        String orderJson = placeOrder("XBTUSD", "Buy", 100, 36537);
-        String orderJson = "{\"symbol\":\"XBTUSD\",\"side\":\"Buy\",\"orderQty\":100,\"price\":36400,\"ordType\":\"Limit\"}";
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create("https://testnet.bitmex.com/api/v1/order"))
-                .header("Content-Type", "application/json")
-                .header("api-expires", String.valueOf(expires))
-                .header("api-key", "DI-FVmnjsNvWGcJLEyVxqncH")
-                .header("api-signature",
-                  generateSignature("bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v",
-                        "POST",
-                        "https://testnet.bitmex.com/api/v1/order",
-                        expires,
-                        orderJson))
-                .POST(HttpRequest.BodyPublishers.ofString(orderJson))
-                .build();
-
-        HttpResponse<String> send = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        System.out.println(generateSignature("bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v",
-                "POST",
-                "https://testnet.bitmex.com/api/v1/order",
-                expires,
-                orderJson));
-        System.out.println(send.statusCode());
-        System.out.println(send.body());
     }
 
 
@@ -100,14 +69,6 @@ public class OrderListWork {
         return signature;
     }
 
-    private static String placeOrder(String symbol, String side, int qty, double price) {
-        String orderJson = String.format("{\"symbol\":\"%s\",\"side\":\"%s\",\"orderQty\":%d,\"price\":%f,\"ordType\":\"Limit\"}",
-                symbol, side, qty, price);
-        System.out.println(orderJson);
-        System.out.println("-------------------------------------");
-        return orderJson;
-    }
-
     private static void getOrderList() throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newBuilder().build();
         long expires = System.currentTimeMillis() / 1000 + 5;
@@ -121,9 +82,19 @@ public class OrderListWork {
                 .build();
 
         HttpResponse<String> send = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        System.out.println(send.body());
+//        System.out.println(send.body());
+        String body = send.body(); // вся строка из всех ордеров. РАспарсить на отдельные ордера. сделать List ордеров. и там уже сортировать ит.д.
 
-        System.out.println("-------------------------------------");
+        List<Order> orders = OrderParser.parseOrderFromStringToJson(body);
+
+//        for (Order order : orders) {
+//            if (order.getOrdStatus().equalsIgnoreCase("new")) {
+//                System.out.println("Order ID: " + order.getOrderID());
+//                System.out.println(order);
+//            }
+//        }
+
+        Order order = orders.get(orders.size()-1);
+        System.out.println(OrderParser.parseOrderFromJsonToString(order));
     }
-
 }

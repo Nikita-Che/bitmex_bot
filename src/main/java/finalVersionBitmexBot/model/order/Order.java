@@ -1,23 +1,49 @@
 package finalVersionBitmexBot.model.order;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class Order {
-    private String orderId;
+    private String orderID;
     private Symbol symbol;
     private Side side;
     private long orderQty;
-    private long price;
+    private Double price;
     private OrderType ordType;
 
-    public Order(Symbol symbol, Side side, long orderQty, long price, OrderType ordType) {
-        this.symbol = symbol;
-        this.side = side;
-        this.orderQty = orderQty;
-        this.price = price;
-        this.ordType = ordType;
-    }
+    //Ниже параметры для json объекта. Не участвуют в открытии ордера
+    private String clOrdID;
+    private String clOrdLinkID;
+    private int account;
+    private Object displayQty; // Может быть как int, так и null
+    private Object stopPx; // Может быть как int, так и null
+    private Object pegOffsetValue; // Может быть как int, так и null
+    private String pegPriceType;
+    private String currency;
+    private String settlCurrency;
+    private String timeInForce;
+    private String execInst;
+    private String contingencyType;
+    private String ordStatus;
+    private String triggered;
+    private boolean workingIndicator;
+    private String ordRejReason;
+    private int leavesQty;
+    private int cumQty;
+    private double avgPx;
+    private String text;
+    private String transactTime;
+    private String timestamp;
+
+//    public Order(Symbol symbol, Side side, long orderQty, Double price, OrderType ordType) {
+//        this.symbol = symbol;
+//        this.side = side;
+//        this.orderQty = orderQty;
+//        this.price = price;
+//        this.ordType = ordType;
+//    }
 }
 
 

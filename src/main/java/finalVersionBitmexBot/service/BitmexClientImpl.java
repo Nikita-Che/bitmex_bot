@@ -1,5 +1,6 @@
 package finalVersionBitmexBot.service;
 
+import finalVersionBitmexBot.model.order.Order;
 import finalVersionBitmexBot.model.util.Endpoints;
 import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
 
@@ -8,6 +9,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 public class BitmexClientImpl implements BitmexClient{
     OrderService orderService = new OrderServiceImpl();
@@ -22,9 +24,9 @@ public class BitmexClientImpl implements BitmexClient{
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(Endpoints.BASE_TEST_URL))
                 .header("Content-Type", "application/json")
-                .header("api-expires", authenticationHeaders.getExpires())
-                .header("api-key", authenticationHeaders.getApiKey())
-                .header("api-signature", signatureService.createSignature())
+                .header("api-expires", String.valueOf(authenticationHeaders.getExpires()))  // не работает
+                .header("api-key", authenticationHeaders.getApiKey())                       // не работает
+                .header("api-signature", signatureService.createSignature())                // не работает
                 .POST(HttpRequest.BodyPublishers.ofString(orderJson))
                 .build();
 
@@ -49,7 +51,12 @@ public class BitmexClientImpl implements BitmexClient{
     }
 
     @Override
-    public void getOrder() {
+    public void getOrder(String orderId) {
 
+    }
+
+    @Override
+    public List<Order> getOrderList() {
+        return null;
     }
 }
