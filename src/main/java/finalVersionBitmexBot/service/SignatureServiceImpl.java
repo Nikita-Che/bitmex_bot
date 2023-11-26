@@ -16,7 +16,7 @@ public class SignatureServiceImpl implements SignatureService{
 
     @Override
     public String createSignature(String verb, String url, String data) {
-        // TODO: 26.11.2023 взять данные из параметров которые тебе передали из битмекс клиента и передать их в метод generateSignature
+        // 26.11.2023 взять данные из параметров которые тебе передали из битмекс клиента и передать их в метод generateSignature
 
         String s = generateSignature(authenticationHeaders.getApiSecret(),
                 verb,
@@ -31,7 +31,7 @@ public class SignatureServiceImpl implements SignatureService{
 
         String signature = "";
         try {
-            Mac sha256_HMAC = Mac.getInstance(HMAC_SHA256_ALGORITHM);  //НЕ ОТСЮДА А С ПОДПИСИ БРАТЬ
+            Mac sha256_HMAC = Mac.getInstance(HMAC_SHA256_ALGORITHM);  //НЕ ОТСЮДА А С ПОДПИСИ БРАТЬ или вообще сделать класс шифр енамом. и выбирать шифр оттуда
             SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), HMAC_SHA256_ALGORITHM);
             sha256_HMAC.init(secret_key);
 
