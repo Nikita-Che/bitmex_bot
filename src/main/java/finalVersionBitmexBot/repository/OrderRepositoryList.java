@@ -7,7 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderRepositoryList implements OrderRepository {
+
     List<Order> orders = new ArrayList<>();
+
+    @Override
+    public void init(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    @Override
+    public void removeOrder(String orderID) throws OrderNotFoundException {
+        orders.removeIf(order -> order.getOrderID().equals(orderID));
+        throw new OrderNotFoundException("Order with id " + orderID + " not found");
+    }
 
     @Override
     public Order getOrderById(String orderID) throws OrderNotFoundException {
@@ -20,22 +32,24 @@ public class OrderRepositoryList implements OrderRepository {
     }
 
     @Override
-    public List<Order> getOrderList() {
-        // обратись в Битмекс и возьми список всех ордеров.
+    public List<Order> getOpenOrdersList() {
+        List<Order> opeOrdersList = new ArrayList<>();
+        for (Order order : orders) {
+            if (order.getOrdStatus().equalsIgnoreCase("new")) {
+                opeOrdersList.add(order);
+            }
+        }
+        return opeOrdersList;
+    }
+
+    @Override
+    public List<Order> getAllOrdersList() {
         return orders;
     }
 
     @Override
-    public List<Order> getOpenOrders() {
-        List<Order> orderList = getOrderList();
-        List<Order> openList = new ArrayList<>();
-//
-//        for (Order order : orderList) {
-//            if (order.getOrdStatus().equalsIgnoreCase("new")) {
-//                openList.add(order);
-//            }
-//        }
-        return openList;
+    public void clear() {
+        orders.clear();
     }
 }
 

@@ -7,9 +7,13 @@ import java.util.List;
 
 public interface OrderRepository {
     Order getOrderById(String orderID) throws OrderNotFoundException;
+    
+    List<Order> getOpenOrdersList();
+    List<Order> getAllOrdersList();
 
-    List<Order> getOrderList();
+    void clear();
 
-    List<Order> getOpenOrders();
+    void init(List<Order> orders);
 
+    void removeOrder(String orderID) throws OrderNotFoundException;
 }

@@ -1,10 +1,5 @@
 package finalVersionBitmexBot.model.authentification;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-
-
 public class AuthenticationHeaders {
     private long expires;
     private String apiKey;
@@ -14,7 +9,8 @@ public class AuthenticationHeaders {
         expires = System.currentTimeMillis() / 1000 + 5;
         apiKey = "DI-FVmnjsNvWGcJLEyVxqncH";
         apiSecret = "bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v";
-        // TODO: 26.11.2023 тут нужно убрать хардкод и закинуть все в пропертиес. Пропертиес созданы, внизу метод по загрузке но он не пашет
+        // TODO: 26.11.2023 тут нужно убрать хардкод и закинуть все в пропертиес.
+        //  Пропертиес созданы, внизу метод по загрузке но он не пашет
     }
 
     public long getExpires() {

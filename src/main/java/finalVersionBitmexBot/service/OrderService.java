@@ -1,12 +1,24 @@
 package finalVersionBitmexBot.service;
 
+import finalVersionBitmexBot.model.order.Order;
+
+import java.util.List;
+
 public interface OrderService {
 
-    public String createOrder();
+    public void closeOrder(String id);
 
-    public void closeOrder();
+    public Order getOrderById(String id);
 
-    public void getOrderId();
+    String createJsonOrder(String symbol, String side, double orderQty, double price, String ordType);
 
-    public void closeOrders();
+    String openOrder(String jsonOrder);
+
+    List<Order> getAllOrdersList();
+
+    List<Order> getOpenOrdersList();
+
+    void closeAllOrders();
+
+    void chooseOrderToClose();
 }

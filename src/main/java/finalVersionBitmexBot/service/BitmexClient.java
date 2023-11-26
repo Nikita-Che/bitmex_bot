@@ -6,12 +6,18 @@ import java.util.List;
 
 public interface BitmexClient {
 
-    void test();
     void openOrder();
-    void closeOrder(int id);
-    void clodeAllOrders();
-    void getOrder(String orderId);
 
-    List<Order> getOrderList();
+    void chooseOrderToClose();
+
+    void closeOrder(String orderId);
+
+    void closeAllOrders();
+
+    Order getOrder(String orderId);
+
+    List<Order> getAllOrdersList();
+
+    List<Order> getOpenOrdersList();
 
 }
