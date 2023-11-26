@@ -15,7 +15,7 @@ public class App {
 //        bitmexClient.closeOrder("23123"); //work
 //        bitmexClient.closeOrder("cbb3500c-4543-4036-8486-39717798ce21"); //work
 
-        bitmexClient.chooseOrderToClose();
+        bitmexClient.chooseOrderToClose();//work
 
     }
 }

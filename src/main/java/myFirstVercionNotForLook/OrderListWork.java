@@ -1,4 +1,4 @@
-package myVersion;
+package myFirstVercionNotForLook;
 
 import finalVersionBitmexBot.model.order.Order;
 import finalVersionBitmexBot.model.util.OrderParser;

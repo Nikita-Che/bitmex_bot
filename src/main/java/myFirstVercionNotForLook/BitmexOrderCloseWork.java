@@ -1,4 +1,4 @@
-package myVersion;
+package myFirstVercionNotForLook;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -10,24 +10,29 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-public class BitmexCloseAllOrdersWork {
+public class BitmexOrderCloseWork {
     private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
 
     public static void main(String[] args) {
         String apiSecret = "bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v"; // Ваш API-секрет BitMEX
         String apiKey = "DI-FVmnjsNvWGcJLEyVxqncH"; // Ваш API-ключ BitMEX
-        long accountId = 411991; // ID вашего аккаунта на BitMEX
+        String verb = "DELETE"; // Метод DELETE для отмены ордера
+        String path = "/api/v1/order"; // Путь для отмены ордера
+        String orderIdToClose = "8ad0c8d0-663c-4a63-ad3d-9679adf42506"; // ID открытого ордера, который требуется закрыть
+        System.out.println(orderIdToClose);
         long expires = System.currentTimeMillis() / 1000 + 5;
 
-        String signature = generateSignature(apiSecret, "DELETE", "/api/v1/order/all", expires, "");
+        String signature = generateSignature(apiSecret, verb, path + "?orderID=" + orderIdToClose, expires, "");
+
+//  6e179549-586b-40bc-bd2f-c253bd95c014
+//  139a12d4-cfa1-4d0e-bcbe-104b9326651e
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://testnet.bitmex.com/api/v1/order/all"))
+                .uri(URI.create("https://testnet.bitmex.com" + path + "?orderID=" + orderIdToClose))
                 .header("Content-Type", "application/json")
                 .header("api-expires", String.valueOf(expires))
                 .header("api-key", apiKey)
-
                 .header("api-signature", signature)
                 .DELETE()
                 .build();
@@ -39,6 +44,7 @@ public class BitmexCloseAllOrdersWork {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     private static String generateSignature(String secret, String verb, String url, long expires, String data) {

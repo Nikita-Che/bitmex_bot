@@ -10,7 +10,7 @@ public class AuthenticationHeaders {
         apiKey = "DI-FVmnjsNvWGcJLEyVxqncH";
         apiSecret = "bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v";
         // TODO: 26.11.2023 тут нужно убрать хардкод и закинуть все в пропертиес.
-        //  Пропертиес созданы, внизу метод по загрузке но он не пашет
+        //  Пропертиес созданы, внизу метод по загрузке но он не пашет исправь
     }
 
     public long getExpires() {
