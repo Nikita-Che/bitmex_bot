@@ -6,23 +6,15 @@ import java.util.Properties;
 
 
 public class AuthenticationHeaders {
-    private long expires = System.currentTimeMillis() / 1000 + 5;
+    private long expires;
     private String apiKey;
     private String apiSecret;
 
     public AuthenticationHeaders() {
-        loadProperties("properties.props");
-    }
-
-    public void loadProperties(String filePath) {
-        Properties props = new Properties();
-        try {
-            props.load(new FileInputStream(filePath));
-            this.apiKey = props.getProperty("apiKey");
-            this.apiSecret = props.getProperty("apiSecret");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        expires = System.currentTimeMillis() / 1000 + 5;
+        apiKey = "DI-FVmnjsNvWGcJLEyVxqncH";
+        apiSecret = "bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v";
+        // TODO: 26.11.2023 тут нужно убрать хардкод и закинуть все в пропертиес. Пропертиес созданы, внизу метод по загрузке но он не пашет
     }
 
     public long getExpires() {
@@ -49,5 +41,19 @@ public class AuthenticationHeaders {
         this.apiSecret = apiSecret;
     }
 
+    //    public AuthenticationHeaders() {
+//        loadProperties("properties.props");
+//    }
+//
+//    public void loadProperties(String filePath) {
+//        Properties props = new Properties();
+//        try {
+//            props.load(new FileInputStream(filePath));
+//            this.apiKey = props.getProperty("apiKey");
+//            this.apiSecret = props.getProperty("apiSecret");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

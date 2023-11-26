@@ -2,18 +2,20 @@ package finalVersionBitmexBot.model.order;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
+// TODO: 26.11.2023 добавить сюда билдер
 @Data
-@Builder
 public class Order {
     private String orderID;
-    private Symbol symbol;
-    private Side side;
-    private long orderQty;
+    private String symbol;
+    private String side;
+    private Double orderQty;
     private Double price;
-    private OrderType ordType;
+    private String ordType;
 
     //Ниже параметры для json объекта. Не участвуют в открытии ордера
+    private String ordStatus;
     private String clOrdID;
     private String clOrdLinkID;
     private int account;
@@ -26,7 +28,6 @@ public class Order {
     private String timeInForce;
     private String execInst;
     private String contingencyType;
-    private String ordStatus;
     private String triggered;
     private boolean workingIndicator;
     private String ordRejReason;
@@ -37,20 +38,41 @@ public class Order {
     private String transactTime;
     private String timestamp;
 
-//    public Order(Symbol symbol, Side side, long orderQty, Double price, OrderType ordType) {
-//        this.symbol = symbol;
-//        this.side = side;
-//        this.orderQty = orderQty;
-//        this.price = price;
-//        this.ordType = ordType;
-//    }
+    public Order(String symbol, String side, Double orderQty, Double price, String ordType) {
+        this.symbol = symbol;
+        this.side = side;
+        this.orderQty = orderQty;
+        this.price = price;
+        this.ordType = ordType;
+    }
+
+    public void setOrderID(String orderID) {
+        this.orderID = orderID;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
+    }
+
+    public void setOrderQty(Double orderQty) {
+        this.orderQty = orderQty;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setOrdType(String ordType) {
+        this.ordType = ordType;
+    }
+
+    public void setOrdStatus(String ordStatus) {
+        this.ordStatus = ordStatus;
+    }
+
 }
 
-
-/*      orderID	:	553b8d62-8ae8-4bc5-8b17-47a681c4839d
-        symbol	:	XBTUSD
-        side	:	Buy
-        orderQty	:	100
-        price	:	36000
-        ordType	:	Limit
-*/

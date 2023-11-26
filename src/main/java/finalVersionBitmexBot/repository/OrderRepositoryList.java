@@ -29,12 +29,13 @@ public class OrderRepositoryList implements OrderRepository {
     public List<Order> getOpenOrders() {
         List<Order> orderList = getOrderList();
         List<Order> openList = new ArrayList<>();
-
-        for (Order order : orderList) {
-            if (order.getOrdStatus().equalsIgnoreCase("new")) {
-                openList.add(order);
-            }
-        }
+//
+//        for (Order order : orderList) {
+//            if (order.getOrdStatus().equalsIgnoreCase("new")) {
+//                openList.add(order);
+//            }
+//        }
         return openList;
     }
 }
+

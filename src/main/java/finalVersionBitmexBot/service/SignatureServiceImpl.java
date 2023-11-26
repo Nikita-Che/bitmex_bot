@@ -1,6 +1,7 @@
 package finalVersionBitmexBot.service;
 
 import finalVersionBitmexBot.model.Signature;
+import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -9,14 +10,20 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 public class SignatureServiceImpl implements SignatureService{
-    private Signature signature;
+    private final Signature signature = new Signature();
     private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
+    AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
 
     @Override
-    public String createSignature() {
-        generateSignature(signature.getApiSecret(),signature.getVerb(), signature.getPath(),signature.getExpires(),signature.getData());
-        // тут создаем подпимсь и передаем ее в клиента
-        return "";
+    public String createSignature(String verb, String url, String data) {
+        // TODO: 26.11.2023 взять данные из параметров которые тебе передали из битмекс клиента и передать их в метод generateSignature
+
+        String s = generateSignature(authenticationHeaders.getApiSecret(),
+                verb,
+                url,
+                authenticationHeaders.getExpires(),
+                data);
+        return s;
     }
 
     private String generateSignature(String secret, String verb, String url, long expires, String data) {

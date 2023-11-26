@@ -22,7 +22,35 @@ public class OrderListWork {
         getOrderList();
     }
 
+    private static void getOrderList() throws IOException, InterruptedException {
+        HttpClient httpClient = HttpClient.newBuilder().build();
+        long expires = System.currentTimeMillis() / 1000 + 5;
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+//                .uri(URI.create("https://testnet.bitmex.com/api/v1/order"))
+                .uri(URI.create("https://testnet.bitmex.com/api/v1/order?count=100&reverse=false"))
+                .header("api-expires", String.valueOf(expires))
+                .header("api-key", "DI-FVmnjsNvWGcJLEyVxqncH")
+                .header("api-signature", generateSignature("bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v", "GET",
+                        "https://testnet.bitmex.com/api/v1/order?count=100&reverse=false", expires, ""))
+                .build();
 
+        HttpResponse<String> send = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+//        System.out.println(send.body());
+        String body = send.body(); // вся строка из всех ордеров. РАспарсить на отдельные ордера. сделать List ордеров. и там уже сортировать ит.д.
+
+        List<Order> orders = OrderParser.parseOrderFromStringToJson(body);
+
+        for (Order order : orders) {
+            //|| order.getOrdStatus().equalsIgnoreCase("Filled")
+            if (order.getOrdStatus().equalsIgnoreCase("new")) {
+                System.out.println("Order ID: " + order.getOrderID());
+                System.out.println(order + "\n");
+            }
+        }
+
+//        Order order = orders.get(orders.size()-1);
+//        System.out.println(OrderParser.parseOrderFromJsonToString(order));
+    }
 
     private static String generateSignature(String secret, String verb, String url, long expires, String data) {
         String path = url;
@@ -67,34 +95,5 @@ public class OrderListWork {
         }
 
         return signature;
-    }
-
-    private static void getOrderList() throws IOException, InterruptedException {
-        HttpClient httpClient = HttpClient.newBuilder().build();
-        long expires = System.currentTimeMillis() / 1000 + 5;
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-//                .uri(URI.create("https://testnet.bitmex.com/api/v1/order"))
-                .uri(URI.create("https://testnet.bitmex.com/api/v1/order?count=10&reverse=false"))
-                .header("api-expires", String.valueOf(expires))
-                .header("api-key", "DI-FVmnjsNvWGcJLEyVxqncH")
-                .header("api-signature", generateSignature("bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v", "GET",
-                        "https://testnet.bitmex.com/api/v1/order?count=10&reverse=false", expires, ""))
-                .build();
-
-        HttpResponse<String> send = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-//        System.out.println(send.body());
-        String body = send.body(); // вся строка из всех ордеров. РАспарсить на отдельные ордера. сделать List ордеров. и там уже сортировать ит.д.
-
-        List<Order> orders = OrderParser.parseOrderFromStringToJson(body);
-
-//        for (Order order : orders) {
-//            if (order.getOrdStatus().equalsIgnoreCase("new")) {
-//                System.out.println("Order ID: " + order.getOrderID());
-//                System.out.println(order);
-//            }
-//        }
-
-        Order order = orders.get(orders.size()-1);
-        System.out.println(OrderParser.parseOrderFromJsonToString(order));
     }
 }

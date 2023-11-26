@@ -6,7 +6,8 @@ import finalVersionBitmexBot.service.BitmexClientImpl;
 public class App {
     public static void main(String[] args) {
         BitmexClient bitmexClient = new BitmexClientImpl();
-//        bitmexClient.openOrder();
-        bitmexClient.getOrderList();
+        bitmexClient.openOrder(); //work
+//        bitmexClient.getOrderList();
+//        bitmexClient.test();
     }
 }
