@@ -1,14 +1,5 @@
 package myFirstVercionNotForLook;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
@@ -16,18 +7,26 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocketListener;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
 public class WebSocket {
 
-    private static final String API_KEY = "CfwQ4SZ6gM_t6dIy1bCLJylX";
-    private static final String API_SECRET = "f9XOPLacPCZJ1dvPzN8B6Et7nMEaPGeomMSHk8Cr2zD4NfCY";
+    private static final String API_KEY = "DI-FVmnjsNvWGcJLEyVxqncH";
+    private static final String API_SECRET = "bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v";
 
-    private static final String BITMEX_URL = "wss://www.bitmex.com";
+    private static final String BITMEX_URL = "wss://ws.testnet.bitmex.com";
     private static final String VERB = "GET";
     private static final String ENDPOINT = "/realtime";
 
     public static void main(String[] args) {
         testWithMessage();
-        testWithQueryString();
+//        testWithQueryString();
     }
 
     public static void testWithMessage() {

@@ -14,8 +14,7 @@ public class App {
 //        System.out.println(bitmexClient.getOrder("e8b93681-ee5d-44d9-8d4f-5d9fa205ff80")); //work
 //        bitmexClient.closeOrder("23123"); //work
 //        bitmexClient.closeOrder("cbb3500c-4543-4036-8486-39717798ce21"); //work
-
-        bitmexClient.chooseOrderToClose();//work
+//        bitmexClient.chooseOrderToClose();//work
 
     }
 }

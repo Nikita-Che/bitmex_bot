@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
-public class BitmexWebSocketClient {
+public class BitmexWebSocketClientIlya {
     private Session session;
     private Boolean isConnected;
 
