@@ -1,11 +1,11 @@
 package finalVersionBitmexBot;
 
 import finalVersionBitmexBot.service.BitmexClient;
-import finalVersionBitmexBot.service.BitmexClientImpl;
+import finalVersionBitmexBot.service.BitmexHTTPClientImpl;
 
 public class App {
     public static void main(String[] args) {
-        BitmexClient bitmexClient = new BitmexClientImpl();
+        BitmexClient bitmexClient = new BitmexHTTPClientImpl();
 //        bitmexClient.openOrder(); //work
 //        bitmexClient.getAllOrdersList(); //work
 //        bitmexClient.getOpenOrdersList(); //work
