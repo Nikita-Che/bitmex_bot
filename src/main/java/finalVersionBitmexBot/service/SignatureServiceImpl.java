@@ -115,8 +115,8 @@ public class SignatureServiceImpl implements SignatureService{
         try {
             String message = "GET" + Endpoints.BASE_TEST_URL_WEBSOCKET_REALTIME + authenticationHeaders.getExpires();
 
-            Mac sha256Hmac = Mac.getInstance("HmacSHA256");
-            SecretKeySpec secretKeySpec = new SecretKeySpec(authenticationHeaders.getApiSecret().getBytes(), "HmacSHA256");
+            Mac sha256Hmac = Mac.getInstance(AuthenticationCipher.HMAC_SHA256_ALGORITHM);
+            SecretKeySpec secretKeySpec = new SecretKeySpec(authenticationHeaders.getApiSecret().getBytes(), AuthenticationCipher.HMAC_SHA256_ALGORITHM);
             sha256Hmac.init(secretKeySpec);
             byte[] signatureBytes = sha256Hmac.doFinal(message.getBytes());
             return authenticationHeaders.getApiKey() + ":" + authenticationHeaders.getExpires() + ":" + Base64.getEncoder().encodeToString(signatureBytes);
