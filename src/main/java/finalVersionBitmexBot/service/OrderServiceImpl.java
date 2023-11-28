@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             logger.info(response.body() + "all Orders closed");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         orderRepository.clear();
     }
@@ -161,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             logger.info(response.body() + "Order closed");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         // TODO: 26.11.2023  выдает OrderNotFoundException. косяк в репозитории.

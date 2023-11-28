@@ -2,16 +2,20 @@ package finalVersionBitmexBot.repository;
 
 import finalVersionBitmexBot.exception.OrderNotFoundException;
 import finalVersionBitmexBot.model.order.Order;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderRepositoryList implements OrderRepository {
     private List<Order> orders = new ArrayList<>();
+    private static final Logger logger = LogManager.getLogger(OrderRepositoryList.class);
 
     @Override
     public void init(List<Order> orders) {
         this.orders = orders;
+        logger.info("init repository");
     }
 
     @Override
@@ -48,6 +52,7 @@ public class OrderRepositoryList implements OrderRepository {
 
     @Override
     public void clear() {
+        logger.info("repository cleared");
         orders.clear();
     }
 }

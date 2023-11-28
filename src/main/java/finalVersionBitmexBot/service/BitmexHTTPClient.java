@@ -19,6 +19,4 @@ public interface BitmexHTTPClient {
     List<Order> getAllOrdersList();
 
     List<Order> getOpenOrdersList();
-
-    void test();
 }

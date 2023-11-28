@@ -4,6 +4,8 @@ import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
 import finalVersionBitmexBot.model.util.Endpoints;
 import finalVersionBitmexBot.model.util.JsonParser;
 import jakarta.websocket.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.tyrus.client.ClientManager;
 import org.glassfish.tyrus.client.ClientProperties;
 
@@ -17,6 +19,7 @@ import java.util.Map;
 public class BitmexWebSocketClient {
     private final AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
     private final SignatureService signatureService = new SignatureServiceImpl();
+    private static final Logger logger = LogManager.getLogger(BitmexWebSocketClient.class);
 
     public void createSessionWithClient() {
         ClientManager client = ClientManager.createClient();
@@ -24,7 +27,7 @@ public class BitmexWebSocketClient {
             client.getProperties().put(ClientProperties.HANDSHAKE_TIMEOUT, 5000);
             client.connectToServer(BitmexWebSocketClient.class, URI.create(Endpoints.BASE_TEST_URL_WEBSOCKET));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -49,7 +52,7 @@ public class BitmexWebSocketClient {
 
             session.getBasicRemote().sendText(json);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 

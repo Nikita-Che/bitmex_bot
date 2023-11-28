@@ -3,6 +3,8 @@ package finalVersionBitmexBot.service;
 import finalVersionBitmexBot.model.authentification.AuthenticationCipher;
 import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
 import finalVersionBitmexBot.model.util.Endpoints;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -14,6 +16,7 @@ import java.util.Base64;
 
 public class SignatureServiceImpl implements SignatureService {
     private final AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
+    private static final Logger logger = LogManager.getLogger(SignatureServiceImpl.class);
 
     @Override
     public String createSignature(String verb, String url, String data) {
@@ -59,7 +62,7 @@ public class SignatureServiceImpl implements SignatureService {
 
             signature = hexString.toString();
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return signature;
@@ -73,7 +76,7 @@ public class SignatureServiceImpl implements SignatureService {
             path = parsedURL.getPath();
             query = parsedURL.getQuery();
         } catch (java.net.MalformedURLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         if (query != null && !query.isEmpty()) {
@@ -102,7 +105,7 @@ public class SignatureServiceImpl implements SignatureService {
             }
             signature = hexString.toString();
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return signature;
@@ -118,10 +121,8 @@ public class SignatureServiceImpl implements SignatureService {
             byte[] signatureBytes = sha256Hmac.doFinal(message.getBytes());
             return authenticationHeaders.getApiKey() + ":" + authenticationHeaders.getExpires() + ":" + Base64.getEncoder().encodeToString(signatureBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return null;
         }
     }
-
-
 }
