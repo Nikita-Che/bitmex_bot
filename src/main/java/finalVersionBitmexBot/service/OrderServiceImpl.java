@@ -7,6 +7,8 @@ import finalVersionBitmexBot.model.util.Endpoints;
 import finalVersionBitmexBot.model.util.JsonParser;
 import finalVersionBitmexBot.repository.OrderRepository;
 import finalVersionBitmexBot.repository.OrderRepositoryList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,10 +22,13 @@ public class OrderServiceImpl implements OrderService {
     private final SignatureService signatureService = new SignatureServiceImpl();
     private final AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
     private final OrderRepository orderRepository = new OrderRepositoryList();
+    private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
+
 
     @Override
     public String createJsonOrder(String symbol, String side, double orderQty, double price, String ordType) {
         Order order = new Order(symbol, side, orderQty, price, ordType);
+        logger.info("Json Order created");
         return JsonParser.parseOrderFromJsonToString(order);
     }
 
@@ -49,9 +54,10 @@ public class OrderServiceImpl implements OrderService {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Response Code: " + response.statusCode());
-        System.out.println("Response Body: " + response.body());
-        return ""; //вернуть ордер в jsone и добавить в репозиторий если статус 200
+
+        String order = response.body();
+        logger.info(JsonParser.extractOrderIDfromString(order) + " was opened");
+        return order;
     }
 
     @Override
@@ -81,11 +87,13 @@ public class OrderServiceImpl implements OrderService {
 
         List<Order> orders = JsonParser.parseOrderFromStringToJson(body);
         orderRepository.init(orders);
+        logger.info("all OrderList получено нах");
         return orders;
     }
 
     @Override
     public List<Order> getOpenOrdersList() {
+        logger.info("all OpenOrderList получено нах");
         return orderRepository.getOpenOrdersList();
     }
 
@@ -107,8 +115,7 @@ public class OrderServiceImpl implements OrderService {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Response status code: " + response.statusCode());
-            System.out.println("Response body: " + response.body());
+            logger.info(response.body() + "all Orders closed");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,8 +159,7 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Response status code: " + response.statusCode());
-            System.out.println("Response body: " + response.body());
+            logger.info(response.body() + "Order closed");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -168,6 +174,7 @@ public class OrderServiceImpl implements OrderService {
 
     public Order getOrderById(String orderId) {
         try {
+            logger.info("Order get "+ orderId);
             return orderRepository.getOrderById(orderId);
         } catch (OrderNotFoundException e) {
             throw new RuntimeException(e);

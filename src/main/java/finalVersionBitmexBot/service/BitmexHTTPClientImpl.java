@@ -1,6 +1,8 @@
 package finalVersionBitmexBot.service;
 
 import finalVersionBitmexBot.model.order.Order;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.util.Properties;
 
 public class BitmexHTTPClientImpl implements BitmexHTTPClient {
     private final OrderService orderService = new OrderServiceImpl();
+    private static final Logger logger = LogManager.getLogger(BitmexHTTPClientImpl.class);
 
     @Override
     public void openOrder() {
@@ -62,8 +65,16 @@ public class BitmexHTTPClientImpl implements BitmexHTTPClient {
             props.add (properties.getProperty("price"));
             props.add (properties.getProperty("ordType"));
         } catch (IOException e) {
+            logger.error("Props file or data накосячено");
             throw new RuntimeException(e);
         }
         return props;
+    }
+
+    @Override
+    public void test() {
+        logger.debug("This is a debug message.");
+        logger.info("This is an info message.");
+        logger.error("This is an error message.");
     }
 }

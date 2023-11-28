@@ -34,6 +34,15 @@ public class JsonParser {
             return null;
         }
     }
+
+    public static String extractOrderIDfromString(String input) {
+        String[] parts = input.split("\"orderID\":\"");
+        if (parts.length > 1) {
+            String[] subParts = parts[1].split("\"");
+            return subParts[0];
+        }
+        return null;
+    }
 }
 
 

@@ -3,14 +3,14 @@ package finalVersionBitmexBot;
 import finalVersionBitmexBot.model.order.Order;
 import finalVersionBitmexBot.service.BitmexHTTPClient;
 import finalVersionBitmexBot.service.BitmexHTTPClientImpl;
-import finalVersionBitmexBot.service.BitmexWebSocketClient;
 
 import java.util.List;
 
 public class App {
     public static void main(String[] args) {
         BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
-//        bitmexClient.openOrder(); //work
+//        bitmexClient.test();
+        bitmexClient.openOrder(); //work
 //        bitmexClient.getAllOrdersList(); //work
 
         List<Order> openOrdersList = bitmexClient.getOpenOrdersList();//work
@@ -24,8 +24,8 @@ public class App {
 //        bitmexClient.closeOrder("cbb3500c-4543-4036-8486-39717798ce21"); //work
 //        bitmexClient.chooseOrderToClose();//work
 
-        BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
-        bitmexWebSocketClient.createSessionWithSession();
-        bitmexWebSocketClient.createSessionWithClient();
+//        BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
+//        bitmexWebSocketClient.createSessionWithSession();
+//        bitmexWebSocketClient.createSessionWithClient();
     }
 }
