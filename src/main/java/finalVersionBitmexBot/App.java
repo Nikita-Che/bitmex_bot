@@ -9,8 +9,7 @@ import java.util.List;
 public class App {
     public static void main(String[] args) {
         BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
-//        bitmexClient.test();
-        bitmexClient.openOrder(); //work
+//        bitmexClient.openOrder(); //work
 //        bitmexClient.getAllOrdersList(); //work
 
         List<Order> openOrdersList = bitmexClient.getOpenOrdersList();//work

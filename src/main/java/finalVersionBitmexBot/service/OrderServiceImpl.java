@@ -159,7 +159,7 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            logger.info(response.body() + "Order closed");
+            logger.info("Order closed " + JsonParser.extractOrderIDfromString(response.body()));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
