@@ -4,7 +4,7 @@ import finalVersionBitmexBot.exception.OrderNotFoundException;
 import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
 import finalVersionBitmexBot.model.order.Order;
 import finalVersionBitmexBot.model.util.Endpoints;
-import finalVersionBitmexBot.model.util.OrderParser;
+import finalVersionBitmexBot.model.util.JsonParser;
 import finalVersionBitmexBot.repository.OrderRepository;
 import finalVersionBitmexBot.repository.OrderRepositoryList;
 
@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String createJsonOrder(String symbol, String side, double orderQty, double price, String ordType) {
         order = new Order(symbol, side, orderQty, price, ordType);
-        return OrderParser.parseOrderFromJsonToString(order);
+        return JsonParser.parseOrderFromJsonToString(order);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
 
         String body = send.body(); // Вся строка из всех ордеров.
 
-        List<Order> orders = OrderParser.parseOrderFromStringToJson(body);
+        List<Order> orders = JsonParser.parseOrderFromStringToJson(body);
         orderRepository.init(orders);
         return orders;
     }

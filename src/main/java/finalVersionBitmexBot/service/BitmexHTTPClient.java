@@ -4,7 +4,7 @@ import finalVersionBitmexBot.model.order.Order;
 
 import java.util.List;
 
-public interface BitmexClient {
+public interface BitmexHTTPClient {
 
     void openOrder();
 

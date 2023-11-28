@@ -1,7 +1,7 @@
 package myFirstVercionNotForLook;
 
 import finalVersionBitmexBot.model.order.Order;
-import finalVersionBitmexBot.model.util.OrderParser;
+import finalVersionBitmexBot.model.util.JsonParser;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -38,7 +38,7 @@ public class OrderListWork {
 //        System.out.println(send.body());
         String body = send.body(); // вся строка из всех ордеров. РАспарсить на отдельные ордера. сделать List ордеров. и там уже сортировать ит.д.
 
-        List<Order> orders = OrderParser.parseOrderFromStringToJson(body);
+        List<Order> orders = JsonParser.parseOrderFromStringToJson(body);
 
         for (Order order : orders) {
             //|| order.getOrdStatus().equalsIgnoreCase("Filled")

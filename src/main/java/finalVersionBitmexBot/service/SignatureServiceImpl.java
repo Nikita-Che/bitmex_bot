@@ -2,6 +2,7 @@ package finalVersionBitmexBot.service;
 
 import finalVersionBitmexBot.model.authentification.AuthenticationCipher;
 import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
+import finalVersionBitmexBot.model.util.Endpoints;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -9,6 +10,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class SignatureServiceImpl implements SignatureService{
     AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
@@ -107,4 +109,22 @@ public class SignatureServiceImpl implements SignatureService{
 
         return signature;
     }
+
+    @Override
+    public String generateSignatureWebSocket() {
+        try {
+            String message = "GET" + Endpoints.BASE_TEST_URL_WEBSOCKET_REALTIME + authenticationHeaders.getExpires();
+
+            Mac sha256Hmac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(authenticationHeaders.getApiSecret().getBytes(), "HmacSHA256");
+            sha256Hmac.init(secretKeySpec);
+            byte[] signatureBytes = sha256Hmac.doFinal(message.getBytes());
+            return authenticationHeaders.getApiKey() + ":" + authenticationHeaders.getExpires() + ":" + Base64.getEncoder().encodeToString(signatureBytes);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }

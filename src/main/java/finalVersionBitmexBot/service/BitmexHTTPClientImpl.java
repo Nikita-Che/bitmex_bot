@@ -4,7 +4,7 @@ import finalVersionBitmexBot.model.order.Order;
 
 import java.util.List;
 
-public class BitmexHTTPClientImpl implements BitmexClient {
+public class BitmexHTTPClientImpl implements BitmexHTTPClient {
     OrderService orderService = new OrderServiceImpl();
 
     @Override
