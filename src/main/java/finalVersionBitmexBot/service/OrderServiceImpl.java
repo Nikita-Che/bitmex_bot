@@ -17,14 +17,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class OrderServiceImpl implements OrderService {
-    Order order;
-    SignatureService signatureService = new SignatureServiceImpl();
-    AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
-    OrderRepository orderRepository = new OrderRepositoryList();
+    private final SignatureService signatureService = new SignatureServiceImpl();
+    private final AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
+    private final OrderRepository orderRepository = new OrderRepositoryList();
 
     @Override
     public String createJsonOrder(String symbol, String side, double orderQty, double price, String ordType) {
-        order = new Order(symbol, side, orderQty, price, ordType);
+        Order order = new Order(symbol, side, orderQty, price, ordType);
         return JsonParser.parseOrderFromJsonToString(order);
     }
 

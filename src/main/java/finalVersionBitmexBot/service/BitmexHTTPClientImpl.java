@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class BitmexHTTPClientImpl implements BitmexHTTPClient {
-    OrderService orderService = new OrderServiceImpl();
+    private final OrderService orderService = new OrderServiceImpl();
 
     @Override
     public void openOrder() {

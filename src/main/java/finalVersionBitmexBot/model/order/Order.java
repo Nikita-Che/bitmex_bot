@@ -1,10 +1,7 @@
 package finalVersionBitmexBot.model.order;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
-// TODO: 26.11.2023 добавить сюда билдер
 @Data
 public class Order {
     private String orderID;

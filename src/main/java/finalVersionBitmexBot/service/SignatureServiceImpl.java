@@ -12,17 +12,17 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-public class SignatureServiceImpl implements SignatureService{
-    AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
+public class SignatureServiceImpl implements SignatureService {
+    private final AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
 
     @Override
     public String createSignature(String verb, String url, String data) {
         String signature =
                 generateSignature(authenticationHeaders.getApiSecret(),
-                verb,
-                url,
-                authenticationHeaders.getExpires(),
-                data);
+                        verb,
+                        url,
+                        authenticationHeaders.getExpires(),
+                        data);
         return signature;
     }
 
@@ -101,9 +101,7 @@ public class SignatureServiceImpl implements SignatureService{
                 hexString.append(hex);
             }
             signature = hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (java.security.InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
         }
 

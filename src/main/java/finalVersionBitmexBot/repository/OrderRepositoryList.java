@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderRepositoryList implements OrderRepository {
-
-    List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     @Override
     public void init(List<Order> orders) {

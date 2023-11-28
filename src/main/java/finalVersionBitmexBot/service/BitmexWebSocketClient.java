@@ -15,9 +15,8 @@ import java.util.Map;
 
 @ClientEndpoint
 public class BitmexWebSocketClient {
-    AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
-    SignatureService signatureService = new SignatureServiceImpl();
-    Session session;
+    private final AuthenticationHeaders authenticationHeaders = new AuthenticationHeaders();
+    private final SignatureService signatureService = new SignatureServiceImpl();
 
     public void createSessionWithClient() {
         ClientManager client = ClientManager.createClient();
@@ -32,7 +31,7 @@ public class BitmexWebSocketClient {
     public void createSessionWithSession() {
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         try {
-            session = container.connectToServer(this, new URI(Endpoints.BASE_TEST_URL_WEBSOCKET));
+            Session session = container.connectToServer(this, new URI(Endpoints.BASE_TEST_URL_WEBSOCKET));
         } catch (DeploymentException | IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
