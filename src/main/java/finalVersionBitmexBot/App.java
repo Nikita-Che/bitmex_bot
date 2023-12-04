@@ -39,9 +39,6 @@ public class App {
             BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
             URI uri = new URI(bitmexWebSocketEndpoint);
 
-            //  bitmexWebSocketClient.createSessionWithSession();
-            //   bitmexWebSocketClient.createSessionWithClient();
-
             try {
                 container.connectToServer(bitmexWebSocketClient, uri);
             } catch (DeploymentException | IOException e) {
