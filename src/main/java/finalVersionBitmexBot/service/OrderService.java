@@ -10,8 +10,6 @@ public interface OrderService {
 
     Order getOrderById(String id);
 
-    String createJsonOrder(String symbol, String side, double orderQty, double price, String ordType);
-
     String openOrder(String jsonOrder);
 
     List<Order> getAllOrdersList();
@@ -21,4 +19,5 @@ public interface OrderService {
     void closeAllOrders();
 
     void chooseOrderToClose();
+
 }

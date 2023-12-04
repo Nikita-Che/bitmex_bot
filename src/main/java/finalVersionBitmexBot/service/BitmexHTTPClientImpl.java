@@ -11,13 +11,17 @@ import java.util.List;
 import java.util.Properties;
 
 public class BitmexHTTPClientImpl implements BitmexHTTPClient {
-    private final OrderService orderService = new OrderServiceImpl();
+    private final OrderServiceImpl orderService = new OrderServiceImpl();
     private static final Logger logger = LogManager.getLogger(BitmexHTTPClientImpl.class);
 
     @Override
     public void openOrder() {
         List<String> props = loadFromProps();
-        String orderJson = orderService.createJsonOrder(props.get(0), props.get(1), Double.parseDouble(props.get(2)), Double.parseDouble(props.get(3)), props.get(4));
+        String orderJson = orderService.createJsonOrder(props.get(0),
+                props.get(1),
+                Double.parseDouble(props.get(2)),
+                Double.parseDouble(props.get(3)),
+                props.get(4));
         orderService.openOrder(orderJson);
     }
 
