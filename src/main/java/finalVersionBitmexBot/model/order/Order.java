@@ -1,7 +1,9 @@
 package finalVersionBitmexBot.model.order;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Data
 public class Order {
     private String orderID;
@@ -41,6 +43,118 @@ public class Order {
         this.orderQty = orderQty;
         this.price = price;
         this.ordType = ordType;
+    }
+
+    public String getOrdStatus() {
+        return ordStatus;
+    }
+
+    public String getOrderID() {
+        return orderID;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public String getSide() {
+        return side;
+    }
+
+    public Double getOrderQty() {
+        return orderQty;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public String getOrdType() {
+        return ordType;
+    }
+
+    public String getClOrdID() {
+        return clOrdID;
+    }
+
+    public String getClOrdLinkID() {
+        return clOrdLinkID;
+    }
+
+    public int getAccount() {
+        return account;
+    }
+
+    public Object getDisplayQty() {
+        return displayQty;
+    }
+
+    public Object getStopPx() {
+        return stopPx;
+    }
+
+    public Object getPegOffsetValue() {
+        return pegOffsetValue;
+    }
+
+    public String getPegPriceType() {
+        return pegPriceType;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public String getSettlCurrency() {
+        return settlCurrency;
+    }
+
+    public String getTimeInForce() {
+        return timeInForce;
+    }
+
+    public String getExecInst() {
+        return execInst;
+    }
+
+    public String getContingencyType() {
+        return contingencyType;
+    }
+
+    public String getTriggered() {
+        return triggered;
+    }
+
+    public boolean isWorkingIndicator() {
+        return workingIndicator;
+    }
+
+    public String getOrdRejReason() {
+        return ordRejReason;
+    }
+
+    public int getLeavesQty() {
+        return leavesQty;
+    }
+
+    public int getCumQty() {
+        return cumQty;
+    }
+
+    public double getAvgPx() {
+        return avgPx;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getTransactTime() {
+        return transactTime;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
     }
 
     public void setOrderID(String orderID) {

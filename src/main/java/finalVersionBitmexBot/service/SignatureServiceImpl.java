@@ -119,7 +119,17 @@ public class SignatureServiceImpl implements SignatureService {
             SecretKeySpec secretKeySpec = new SecretKeySpec(authenticationHeaders.getApiSecret().getBytes(), AuthenticationCipher.HMAC_SHA256_ALGORITHM);
             sha256Hmac.init(secretKeySpec);
             byte[] signatureBytes = sha256Hmac.doFinal(message.getBytes());
-            return authenticationHeaders.getApiKey() + ":" + authenticationHeaders.getExpires() + ":" + Base64.getEncoder().encodeToString(signatureBytes);
+//            return authenticationHeaders.getApiKey() + ":" + authenticationHeaders.getExpires() + ":" + Base64.getEncoder().encodeToString(signatureBytes);
+//        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+//            logger.error(e.getMessage());
+//            return null;
+//        }
+            StringBuilder hexStringBuilder = new StringBuilder();
+            for (byte b : signatureBytes) {
+                hexStringBuilder.append(String.format("%02x", b));
+            }
+
+            return hexStringBuilder.toString();
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             logger.error(e.getMessage());
             return null;
