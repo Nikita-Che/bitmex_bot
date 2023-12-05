@@ -1,12 +1,10 @@
 package finalVersionBitmexBot;
 
-import finalVersionBitmexBot.service.BitmexHTTPClient;
-import finalVersionBitmexBot.service.BitmexHTTPClientImpl;
 import finalVersionBitmexBot.service.BitmexWebSocketClient;
 
 public class App {
     public static void main(String[] args) {
-        BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
+//        BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
 //        bitmexClient.openOrder(); //work
 //        bitmexClient.getAllOrdersList(); //work
 
@@ -20,7 +18,7 @@ public class App {
 //        bitmexClient.closeOrder("23123"); //work
 //        bitmexClient.closeOrder("cbb3500c-4543-4036-8486-39717798ce21"); //work
 //        bitmexClient.chooseOrderToClose();//work
-
+//
         BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
         bitmexWebSocketClient.createSessionAndSubscribeToOrder();
 //        bitmexWebSocketClient.createSession();

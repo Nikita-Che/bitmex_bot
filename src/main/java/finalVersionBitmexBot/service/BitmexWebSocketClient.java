@@ -1,6 +1,9 @@
 package finalVersionBitmexBot.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
+import finalVersionBitmexBot.model.order.Order;
 import finalVersionBitmexBot.model.util.Endpoints;
 import finalVersionBitmexBot.model.util.JsonParser;
 import jakarta.websocket.*;
@@ -51,19 +54,17 @@ public class BitmexWebSocketClient {
             try {
                 Session session = container.connectToServer(bitmexWebSocketClient, uri);
 
-                // Отправка запроса на подписку на orderBookL2_25
                 Map<String, Object> subscription = new HashMap<>();
                 subscription.put("op", "subscribe");
 //                subscription.put("args", "orderBookL2_25:XBTUSD"); // Подписка на orderBookL2_25 по конкретной паре
-                subscription.put("args", "order"); // Подписка на orderBookL2_25 по конкретной паре
+                subscription.put("args", "order");
+//                subscription.put("args", "position");
 
                 String json = JsonParser.toJson(subscription);
                 session.getBasicRemote().sendText(json);
 
-                // Ждем некоторое время для получения сообщений
-                Thread.sleep(100000); // Например, ждем 10 секунд
+                Thread.sleep(30000);
 
-                // Закрытие сессии
                 session.close();
 
             } catch (DeploymentException | IOException | InterruptedException e) {
@@ -77,7 +78,6 @@ public class BitmexWebSocketClient {
 
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("You just Connected to BitMEX WebSocket PIDOR");
         try {
             Map<String, Object> args = new HashMap<>();
             args.put("op", "authKeyExpires");
@@ -93,10 +93,57 @@ public class BitmexWebSocketClient {
 
     @OnMessage
     public void onMessage(String message, Session session) {
+        if (message.contains("\"table\":\"order\",\"action\":\"update\",\"data\":")) {
+            parseOrderWithId(message);
+        }
         System.out.println("Received message: " + message);
-        // Обработка полученных сообщений
     }
 
+    private void parseOrderWithId(String message) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(message);
+
+            JsonNode dataNode = jsonNode.get("data");
+            if (dataNode != null && dataNode.isArray() && dataNode.size() > 0) {
+                for (JsonNode orderNode : dataNode) {
+                    String orderID = orderNode.path("orderID").asText();
+                    String action = jsonNode.get("action").asText();
+
+                    System.out.println("orderID: " + orderID + ", action: " + action);
+                }
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void parseOrderWithIdSymbolSidePrice(String message) {
+        Order order;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(message);
+
+            JsonNode dataNode = jsonNode.get("data");
+            if (dataNode != null && dataNode.isArray() && dataNode.size() > 0) {
+                for (JsonNode orderNode : dataNode) {
+                    order = new Order("","",0.,0.,"");
+                    order.setOrderID(orderNode.path("orderID").asText());
+                    order.setSymbol(orderNode.path("symbol").asText());
+                    order.setSide(orderNode.path("side").asText());
+                    order.setOrderQty(orderNode.path("orderQty").asDouble());
+                    order.setPrice(orderNode.path("price").asDouble());
+                    order.setOrdStatus(orderNode.path("ordStatus").asText());
+
+                    System.out.println("Table: order. Action: UPDATE. " + order);
+                }
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (NullPointerException e) {
+            logger.error("Received invalid order data: " + message);
+        }
+    }
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         System.out.println("Disconnected. Reason: " + closeReason.getReasonPhrase());
