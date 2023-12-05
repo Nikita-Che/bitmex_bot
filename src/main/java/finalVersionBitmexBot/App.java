@@ -22,7 +22,8 @@ public class App {
 //        bitmexClient.chooseOrderToClose();//work
 
         BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
-        bitmexWebSocketClient.createSession();
+        bitmexWebSocketClient.createSessionAndSubscribeToOrder();
+//        bitmexWebSocketClient.createSession();
     }
 }
 

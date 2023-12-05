@@ -42,6 +42,39 @@ public class BitmexWebSocketClient {
         }
     }
 
+    public void createSessionAndSubscribeToOrder() {
+        try {
+            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+            BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient();
+            URI uri = new URI(Endpoints.BASE_TEST_URL_WEBSOCKET);
+
+            try {
+                Session session = container.connectToServer(bitmexWebSocketClient, uri);
+
+                // Отправка запроса на подписку на orderBookL2_25
+                Map<String, Object> subscription = new HashMap<>();
+                subscription.put("op", "subscribe");
+//                subscription.put("args", "orderBookL2_25:XBTUSD"); // Подписка на orderBookL2_25 по конкретной паре
+                subscription.put("args", "order"); // Подписка на orderBookL2_25 по конкретной паре
+
+                String json = JsonParser.toJson(subscription);
+                session.getBasicRemote().sendText(json);
+
+                // Ждем некоторое время для получения сообщений
+                Thread.sleep(100000); // Например, ждем 10 секунд
+
+                // Закрытие сессии
+                session.close();
+
+            } catch (DeploymentException | IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        } catch (URISyntaxException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     @OnOpen
     public void onOpen(Session session) {
         System.out.println("You just Connected to BitMEX WebSocket PIDOR");
