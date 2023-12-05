@@ -112,17 +112,6 @@ public class SignatureServiceImpl implements SignatureService {
 
     @Override
     public String generateSignatureWebSocket() {
-//        try {
-//            String message = "GET" + Endpoints.BASE_TEST_URL_WEBSOCKET_REALTIME + authenticationHeaders.getExpires();
-//            Mac sha256Hmac = Mac.getInstance(AuthenticationCipher.HMAC_SHA256_ALGORITHM);
-//            SecretKeySpec secretKeySpec = new SecretKeySpec(authenticationHeaders.getApiSecret().getBytes(), AuthenticationCipher.HMAC_SHA256_ALGORITHM);
-//            sha256Hmac.init(secretKeySpec);
-//            byte[] signatureBytes = sha256Hmac.doFinal(message.getBytes());
-//            return authenticationHeaders.getApiKey() + ":" + authenticationHeaders.getExpires() + ":" + Base64.getEncoder().encodeToString(signatureBytes);
-//        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-//            logger.error(e.getMessage());
-//            return null;
-//        }
         try {
             String message = "GET" + Endpoints.BASE_TEST_URL_WEBSOCKET_REALTIME + authenticationHeaders.getExpires();
             Mac sha256Hmac = Mac.getInstance(AuthenticationCipher.HMAC_SHA256_ALGORITHM);
@@ -130,7 +119,6 @@ public class SignatureServiceImpl implements SignatureService {
             sha256Hmac.init(secretKeySpec);
             byte[] signatureBytes = sha256Hmac.doFinal(message.getBytes());
 
-            // Конвертировать байты подписи в строку шестнадцатеричных символов
             StringBuilder hexStringBuilder = new StringBuilder();
             for (byte b : signatureBytes) {
                 hexStringBuilder.append(String.format("%02x", b));

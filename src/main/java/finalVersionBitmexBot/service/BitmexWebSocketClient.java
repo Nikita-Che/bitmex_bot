@@ -6,8 +6,6 @@ import finalVersionBitmexBot.model.util.JsonParser;
 import jakarta.websocket.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.glassfish.tyrus.client.ClientManager;
-import org.glassfish.tyrus.client.ClientProperties;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,22 +19,26 @@ public class BitmexWebSocketClient {
     private final SignatureService signatureService = new SignatureServiceImpl();
     private static final Logger logger = LogManager.getLogger(BitmexWebSocketClient.class);
 
-    public void createSessionWithClient() {
-        ClientManager client = ClientManager.createClient();
+    public void createSession() {
         try {
-            client.getProperties().put(ClientProperties.HANDSHAKE_TIMEOUT, 5000);
-            client.connectToServer(BitmexWebSocketClient.class, URI.create(Endpoints.BASE_TEST_URL_WEBSOCKET));
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
+            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+            BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
+            URI uri = new URI(Endpoints.BASE_TEST_URL_WEBSOCKET);
 
-    public void createSessionWithSession() {
-        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-        try {
-            Session session = container.connectToServer(this, new URI(Endpoints.BASE_TEST_URL_WEBSOCKET));
-        } catch (DeploymentException | IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
+            try {
+                container.connectToServer(bitmexWebSocketClient, uri);
+            } catch (DeploymentException | IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        } catch (URISyntaxException e) {
+            logger.error(e.getMessage());
         }
     }
 
