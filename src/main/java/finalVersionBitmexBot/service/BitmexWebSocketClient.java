@@ -56,7 +56,6 @@ public class BitmexWebSocketClient {
 
                 Map<String, Object> subscription = new HashMap<>();
                 subscription.put("op", "subscribe");
-//                subscription.put("args", "orderBookL2_25:XBTUSD"); // Подписка на orderBookL2_25 по конкретной паре
                 subscription.put("args", "order");
 //                subscription.put("args", "position");
 
@@ -144,6 +143,7 @@ public class BitmexWebSocketClient {
             logger.error("Received invalid order data: " + message);
         }
     }
+
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         System.out.println("Disconnected. Reason: " + closeReason.getReasonPhrase());
