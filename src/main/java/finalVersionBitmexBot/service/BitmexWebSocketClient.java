@@ -56,7 +56,7 @@ public class BitmexWebSocketClient {
 
                 Map<String, Object> subscription = new HashMap<>();
                 subscription.put("op", "subscribe");
-                subscription.put("args", "order");
+                subscription.put("args", "order_25"); // самый последний выполненный оредр  - моя цена актива
 //                subscription.put("args", "position");
 
                 String json = JsonParser.toJson(subscription);
