@@ -7,8 +7,8 @@ public class App {
     public static void main(String[] args) {
         BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
 //        bitmexClient.openOrder(); //work
-//        bitmexClient.openMarketOrder();
-        bitmexClient.closeMarketPosition("fb8eba10-4c5a-401e-9595-4e49e0686890");
+//        bitmexClient.openMarketOrder(); //work
+        bitmexClient.closeMarketPosition("her"); //work
 //        bitmexClient.getAllOrdersList(); //work
 
 //        List<Order> openOrdersList = bitmexClient.getOpenOrdersList();//work
