@@ -26,6 +26,16 @@ public class BitmexHTTPClientImpl implements BitmexHTTPClient {
     }
 
     @Override
+    public void openMarketOrder() {
+        List<String> props = loadFromPropsMarket();
+        String orderJson = orderService.createMarketJsonOrder(props.get(0),
+                props.get(1),
+                Double.parseDouble(props.get(2)),
+                props.get(3));
+        orderService.openOrder(orderJson);
+    }
+
+    @Override
     public void chooseOrderToClose() {
         orderService.chooseOrderToClose();
     }
@@ -41,8 +51,13 @@ public class BitmexHTTPClientImpl implements BitmexHTTPClient {
     }
 
     @Override
-    public Order getOrder(String orderId)  {
-       return orderService.getOrderById(orderId);
+    public void closeMarketPosition(String orderId) {
+        orderService.closeMarketPosition(orderId);
+    }
+
+    @Override
+    public Order getOrder(String orderId) {
+        return orderService.getOrderById(orderId);
     }
 
     @Override
@@ -63,11 +78,27 @@ public class BitmexHTTPClientImpl implements BitmexHTTPClient {
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream("properties.props"));
-            props.add (properties.getProperty("symbol"));
-            props.add (properties.getProperty("side"));
-            props.add (properties.getProperty("orderQty"));
-            props.add (properties.getProperty("price"));
-            props.add (properties.getProperty("ordType"));
+            props.add(properties.getProperty("symbol"));
+            props.add(properties.getProperty("side"));
+            props.add(properties.getProperty("orderQty"));
+            props.add(properties.getProperty("price"));
+            props.add(properties.getProperty("ordType"));
+        } catch (IOException e) {
+            logger.error("Props file or data накосячено");
+            throw new RuntimeException(e);
+        }
+        return props;
+    }
+
+    private List<String> loadFromPropsMarket() {
+        List<String> props = new ArrayList<>();
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileInputStream("properties.props"));
+            props.add(properties.getProperty("symbol"));
+            props.add(properties.getProperty("side"));
+            props.add(properties.getProperty("orderQty"));
+            props.add(properties.getProperty("ordTypeMarket"));
         } catch (IOException e) {
             logger.error("Props file or data накосячено");
             throw new RuntimeException(e);

@@ -31,6 +31,12 @@ public class OrderServiceImpl implements OrderService {
         return JsonParser.parseOrderFromJsonToString(order);
     }
 
+    String createMarketJsonOrder(String symbol, String side, double orderQty, String ordType) {
+        Order order = new Order(symbol, side, orderQty, ordType);
+        logger.info("Json Order created");
+        return JsonParser.parseOrderFromJsonToString(order);
+    }
+
     @Override
     public String openOrder(String jsonOrder) {
         String verb = "POST";
@@ -134,6 +140,38 @@ public class OrderServiceImpl implements OrderService {
         Scanner scanner = new Scanner(System.in);
         String userChoice = scanner.nextLine();
         closeOrder(userChoice);
+    }
+
+    @Override
+    public void closeMarketPosition(String positionId) {
+        String verb = "POST";
+        String uri = Endpoints.BASE_TEST_URL
+                + Endpoints.BASE_TEST_URL_SECOND_PART
+                + Endpoints.ORDER_ENDPOINT
+                + "/closePosition";
+
+        String uriForSignature = Endpoints.BASE_TEST_URL_SECOND_PART
+                + Endpoints.ORDER_ENDPOINT
+                + "/closePosition";
+
+        String body = "{\"symbol\":\"XBTUSD\", \"orderQty\":0, \"execInst\":\"Close\", \"text\":\"Closing position\"}";
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .header("api-expires", String.valueOf(authenticationHeaders.getExpires()))
+                .header("api-key", authenticationHeaders.getApiKey())
+                .header("api-signature", signatureService.createSignature(verb, uriForSignature, body))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info("Position closed with ID: " + positionId);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
     public void closeOrder(String orderId) {

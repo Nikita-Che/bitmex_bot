@@ -43,6 +43,13 @@ public class Order {
         this.ordType = ordType;
     }
 
+    public Order(String symbol, String side, Double orderQty, String ordType) {
+        this.symbol = symbol;
+        this.side = side;
+        this.orderQty = orderQty;
+        this.ordType = ordType;
+    }
+
     public void setOrderID(String orderID) {
         this.orderID = orderID;
     }
