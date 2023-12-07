@@ -6,6 +6,7 @@ import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
 import finalVersionBitmexBot.model.order.Order;
 import finalVersionBitmexBot.model.util.Endpoints;
 import finalVersionBitmexBot.model.util.JsonParser;
+import finalVersionBitmexBot.model.util.OrderPriceOnlineGetter;
 import jakarta.websocket.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,13 +57,16 @@ public class BitmexWebSocketClient {
 
                 Map<String, Object> subscription = new HashMap<>();
                 subscription.put("op", "subscribe");
-                subscription.put("args", "order_25"); // самый последний выполненный оредр  - моя цена актива
-//                subscription.put("args", "position");
+
+//                subscription.put("args", "orderBook10:XBTUSD"); // подписка по которой смотрю цену онлайн. Спред считает
+//                subscription.put("args", "position"); // подписка которая мониторит мои открытые позиции.
+//                subscription.put("args", "order"); // подписка которая мониторит изменения в лимитных отложенных ордерах
+                subscription.put("args", "position"); // О подписка которая мониторит мои открытые позиции. в том числе и тиках и если закрыто
 
                 String json = JsonParser.toJson(subscription);
                 session.getBasicRemote().sendText(json);
 
-                Thread.sleep(30000);
+                Thread.sleep(130000);
 
                 session.close();
 
@@ -95,7 +99,15 @@ public class BitmexWebSocketClient {
         if (message.contains("\"table\":\"order\",\"action\":\"update\",\"data\":")) {
             parseOrderWithId(message);
         }
+        if (message.contains("\"table\":\"orderBook10\",\"action\":\"update\"")) {
+            OrderPriceOnlineGetter.getPriceBetweenBidAsk(message);
+        }
         System.out.println("Received message: " + message);
+    }
+
+    @OnClose
+    public void onClose(Session session, CloseReason closeReason) {
+        System.out.println("Disconnected. Reason: " + closeReason.getReasonPhrase());
     }
 
     private void parseOrderWithId(String message) {
@@ -126,7 +138,7 @@ public class BitmexWebSocketClient {
             JsonNode dataNode = jsonNode.get("data");
             if (dataNode != null && dataNode.isArray() && dataNode.size() > 0) {
                 for (JsonNode orderNode : dataNode) {
-                    order = new Order("","",0.,0.,"");
+                    order = new Order("", "", 0., 0., "");
                     order.setOrderID(orderNode.path("orderID").asText());
                     order.setSymbol(orderNode.path("symbol").asText());
                     order.setSide(orderNode.path("side").asText());
@@ -142,10 +154,5 @@ public class BitmexWebSocketClient {
         } catch (NullPointerException e) {
             logger.error("Received invalid order data: " + message);
         }
-    }
-
-    @OnClose
-    public void onClose(Session session, CloseReason closeReason) {
-        System.out.println("Disconnected. Reason: " + closeReason.getReasonPhrase());
     }
 }
