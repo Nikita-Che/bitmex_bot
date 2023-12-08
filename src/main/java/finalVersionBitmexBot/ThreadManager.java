@@ -14,12 +14,23 @@ public class ThreadManager {
 
         subscribeToOrderBook10.start();
         orderPriceOnlineGetterInfoTask.start();
-        subscribeToOrder.start();
-        subscribeToPosition.start();
+
+        // когда гетер перетсанет быть = 0 вызвать фибо менеджер - открытие ордера
+
+//        subscribeToOrder.start();
+//        subscribeToPosition.start();
+    }
+
+    public void startOrderPriceOnlineGetterInfoTaskThread () {
+        Thread orderPriceOnlineGetterInfoTask = new Thread(this::orderPriceOnlineGetterInfoTask);
+        orderPriceOnlineGetterInfoTask.start();
+        if(OrderPriceOnlineGetter.priceForNewOrder!=0){
+            orderPriceOnlineGetterInfoTask.interrupt();
+        }
     }
 
     public void orderPriceOnlineGetterInfoTask (){
-        OrderPriceOnlineGetter.orderPriceOnlineGetterInfoTask();
+        OrderPriceOnlineGetter.orderPriceOnlineGetterInfoTaskForConsole();
     }
 
     public void subscribeToOrderBook10(){

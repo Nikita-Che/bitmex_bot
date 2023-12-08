@@ -1,17 +1,25 @@
 package finalVersionBitmexBot.model.order;
 
 import lombok.Data;
+import lombok.Setter;
 
 @Data
 public class Order {
+    @Setter
     private String orderID;
+    @Setter
     private String symbol;
+    @Setter
     private String side;
+    @Setter
     private Double orderQty;
+    @Setter
     private Double price;
+    @Setter
     private String ordType;
 
     //Ниже параметры для json объекта. Не участвуют в открытии ордера
+    @Setter
     private String ordStatus;
     private String clOrdID;
     private String clOrdLinkID;
@@ -35,14 +43,6 @@ public class Order {
     private String transactTime;
     private String timestamp;
 
-    public Order(String symbol, String side, Double orderQty, Double price, String ordType) {
-        this.symbol = symbol;
-        this.side = side;
-        this.orderQty = orderQty;
-        this.price = price;
-        this.ordType = ordType;
-    }
-
     public Order(String symbol, String side, Double orderQty, String ordType) {
         this.symbol = symbol;
         this.side = side;
@@ -50,33 +50,12 @@ public class Order {
         this.ordType = ordType;
     }
 
-    public void setOrderID(String orderID) {
-        this.orderID = orderID;
-    }
-
-    public void setSymbol(String symbol) {
+    public Order(String symbol, String side, Double orderQty, Double price, String ordType) {
         this.symbol = symbol;
-    }
-
-    public void setSide(String side) {
         this.side = side;
-    }
-
-    public void setOrderQty(Double orderQty) {
         this.orderQty = orderQty;
-    }
-
-    public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public void setOrdType(String ordType) {
         this.ordType = ordType;
     }
-
-    public void setOrdStatus(String ordStatus) {
-        this.ordStatus = ordStatus;
-    }
-
 }
 

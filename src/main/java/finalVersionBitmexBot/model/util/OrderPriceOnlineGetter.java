@@ -3,11 +3,14 @@ package finalVersionBitmexBot.model.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import finalVersionBitmexBot.service.BitmexWebSocketClient;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class OrderPriceOnlineGetter {
     private static final Logger logger = LogManager.getLogger(BitmexWebSocketClient.class);
+
+    @Getter
     public static double priceForNewOrder;
 
     public static void writeOrderPrice(double price) {
@@ -33,22 +36,22 @@ public class OrderPriceOnlineGetter {
         }
     }
 
-   public static void orderPriceOnlineGetterInfoTask () {
-       double lastCheckedPrice = OrderPriceOnlineGetter.priceForNewOrder;
+    public static void orderPriceOnlineGetterInfoTaskForConsole() {
+        double lastCheckedPrice = OrderPriceOnlineGetter.priceForNewOrder;
 
-       while (true) {
-           try {
-               Thread.sleep(1000);
-           } catch (InterruptedException e) {
-               e.printStackTrace();
-           }
+        while (true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-           double currentPrice = OrderPriceOnlineGetter.priceForNewOrder;
+            double currentPrice = OrderPriceOnlineGetter.priceForNewOrder;
 
-           if (currentPrice != lastCheckedPrice) {
-               System.out.println("Price For New Order has changed: " + currentPrice);
-               lastCheckedPrice = currentPrice;
-           }
-       }
-   }
+            if (currentPrice != lastCheckedPrice) {
+                System.out.println("Price For New Order has changed: " + currentPrice);
+                lastCheckedPrice = currentPrice;
+            }
+        }
+    }
 }

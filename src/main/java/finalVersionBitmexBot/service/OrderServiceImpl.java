@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
 
 
-    String createJsonOrder(String symbol, String side, double orderQty, double price, String ordType) {
+    public String createJsonOrder(String symbol, String side, double orderQty, double price, String ordType) {
         Order order = new Order(symbol, side, orderQty, price, ordType);
         logger.info("Json Order created");
         return JsonParser.parseOrderFromJsonToString(order);

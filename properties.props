@@ -8,3 +8,11 @@ price=43195.
 ordType=Limit
 
 ordTypeMarket=Market
+
+
+netOrderSymbol=XBTUSD
+netOrderStep=10
+netOrderCoef=100
+netOrderLevel=7
+netOrderQty=100.
+netOrderType=Limit

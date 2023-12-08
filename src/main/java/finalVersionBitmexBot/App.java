@@ -1,11 +1,10 @@
 package finalVersionBitmexBot;
 
-import finalVersionBitmexBot.service.BitmexHTTPClient;
-import finalVersionBitmexBot.service.BitmexHTTPClientImpl;
+import finalVersionBitmexBot.model.util.OrderPriceOnlineGetter;
 
 public class App {
     public static void main(String[] args) {
-        BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
+//        BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
 //        bitmexClient.openOrder(); //work
 //        bitmexClient.openMarketOrder(); //work
         //      bitmexClient.closeMarketPosition("her"); //work
@@ -30,6 +29,21 @@ public class App {
         ThreadManager threadManager = new ThreadManager();
         threadManager.startSubscriptions();
 
+        boolean flag = true;
+        while (flag) {
+            if (OrderPriceOnlineGetter.priceForNewOrder == 0) {
+                System.out.println("ХУЙ");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                FiboManager fiboManager = new FiboManager();
+                fiboManager.createFirstOrder();
+                flag = false;
+            }
+        }
     }
 }
 

@@ -130,4 +130,75 @@ public class SignatureServiceImpl implements SignatureService {
             return null;
         }
     }
+
 }
+//import java.net.URLEncoder;
+//import java.nio.charset.StandardCharsets;
+//import java.security.InvalidKeyException;
+//import java.security.NoSuchAlgorithmException;
+//
+//import javax.crypto.Mac;
+//import javax.crypto.spec.SecretKeySpec;
+//
+//public class SignatureServiceImpl implements SignatureService {
+//    // ... (остальной код)
+//
+//    private String generateSignatureBase(String secret, String verb, String url, long expires, String data) {
+//        String path = url;
+//        String query = "";
+//        try {
+//            java.net.URL parsedURL = new java.net.URL(url);
+//            path = parsedURL.getPath();
+//            query = parsedURL.getQuery();
+//        } catch (java.net.MalformedURLException e) {
+//            logger.error(e.getMessage());
+//        }
+//
+//        if (query != null && !query.isEmpty()) {
+//            path = path + "?" + query;
+//        }
+//
+//        if (data != null && !data.isEmpty()) {
+//            data = URLEncoder.encode(data, StandardCharsets.UTF_8);
+//        }
+//
+//        String message = verb + path + expires + data;
+//
+//        return message;
+//    }
+//
+//    private String generateSignature(String secret, String message) {
+//        String signature = "";
+//        try {
+//            Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+//            SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
+//            sha256_HMAC.init(secret_key);
+//            byte[] hash = sha256_HMAC.doFinal(message.getBytes());
+//            StringBuilder hexString = new StringBuilder();
+//            for (byte b : hash) {
+//                String hex = Integer.toHexString(0xff & b);
+//                if (hex.length() == 1) {
+//                    hexString.append('0');
+//                }
+//                hexString.append(hex);
+//            }
+//            signature = hexString.toString();
+//        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+//            logger.error(e.getMessage());
+//        }
+//
+//        return signature;
+//    }
+//
+//    @Override
+//    public String createSignature(String verb, String url, String data) {
+//        String message = generateSignatureBase(authenticationHeaders.getApiSecret(), verb, url, authenticationHeaders.getExpires(), data);
+//        return generateSignature(authenticationHeaders.getApiSecret(), message);
+//    }
+//
+//    @Override
+//    public String createSignatureForOrdersList(String verb, String url, String data) {
+//        String message = generateSignatureBase(authenticationHeaders.getApiSecret(), verb, url, authenticationHeaders.getExpires(), data);
+//        return generateSignature(authenticationHeaders.getApiSecret(), message);
+//    }
+//}
