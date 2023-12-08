@@ -2,7 +2,6 @@ package finalVersionBitmexBot;
 
 import finalVersionBitmexBot.service.BitmexHTTPClient;
 import finalVersionBitmexBot.service.BitmexHTTPClientImpl;
-import finalVersionBitmexBot.service.BitmexWebSocketClient;
 
 public class App {
     public static void main(String[] args) {
@@ -24,38 +23,12 @@ public class App {
 //        bitmexClient.chooseOrderToClose();//work
 //
 
-        BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
-        bitmexWebSocketClient.createSessionAndSubscribeToOrder();
-        //        bitmexWebSocketClient.createSession();
-
-//        Runnable task = new Runnable() {
-//            @Override
-//            public void run() {
-//                BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
-//                bitmexWebSocketClient.createSessionAndSubscribeToOrder();
-//            }
-//        };
-//        Runnable task2 = new Runnable() {
-//            @Override
-//            public void run() {
-//                for (int i = 0; i < 30; i++) {
-//                    System.out.println(OrderPriceOnlineGetter.priceForNewOrder);
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            }
-//        };
-//
-//        Thread thread = new Thread(task);
-//        Thread thread2 = new Thread(task2);
-//
-//        thread.start();
-//        thread2.start();
+//        BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
+//        bitmexWebSocketClient.subscribeToOrderBook10();
 
 
+        ThreadManager threadManager = new ThreadManager();
+        threadManager.startSubscriptions();
 
     }
 }

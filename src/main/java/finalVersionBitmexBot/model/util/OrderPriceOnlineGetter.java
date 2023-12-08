@@ -32,4 +32,23 @@ public class OrderPriceOnlineGetter {
             logger.error(e.getMessage());
         }
     }
+
+   public static void orderPriceOnlineGetterInfoTask () {
+       double lastCheckedPrice = OrderPriceOnlineGetter.priceForNewOrder;
+
+       while (true) {
+           try {
+               Thread.sleep(1000);
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+
+           double currentPrice = OrderPriceOnlineGetter.priceForNewOrder;
+
+           if (currentPrice != lastCheckedPrice) {
+               System.out.println("Price For New Order has changed: " + currentPrice);
+               lastCheckedPrice = currentPrice;
+           }
+       }
+   }
 }

@@ -1,14 +1,19 @@
 package finalVersionBitmexBot.model.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import finalVersionBitmexBot.model.order.Order;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JsonParser {
+    private static final Logger logger = LogManager.getLogger(JsonParser.class);
 
     public static List<Order> parseOrderFromStringToJson(String ordersJson) {
         Gson gson = new Gson();
@@ -30,7 +35,7 @@ public class JsonParser {
         try {
             return new ObjectMapper().writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return null;
         }
     }
@@ -43,6 +48,51 @@ public class JsonParser {
         }
         return null;
     }
-}
+
+    public static void parseOrderWithId(String message) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(message);
+
+            JsonNode dataNode = jsonNode.get("data");
+            if (dataNode != null && dataNode.isArray() && dataNode.size() > 0) {
+                for (JsonNode orderNode : dataNode) {
+                    String orderID = orderNode.path("orderID").asText();
+                    String action = jsonNode.get("action").asText();
+
+                    System.out.println("orderID: " + orderID + ", action: " + action);
+                }
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public static void parseOrderWithIdSymbolSidePrice(String message) {
+        Order order;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(message);
+
+            JsonNode dataNode = jsonNode.get("data");
+            if (dataNode != null && dataNode.isArray() && dataNode.size() > 0) {
+                for (JsonNode orderNode : dataNode) {
+                    order = new Order("", "", 0., 0., "");
+                    order.setOrderID(orderNode.path("orderID").asText());
+                    order.setSymbol(orderNode.path("symbol").asText());
+                    order.setSide(orderNode.path("side").asText());
+                    order.setOrderQty(orderNode.path("orderQty").asDouble());
+                    order.setPrice(orderNode.path("price").asDouble());
+                    order.setOrdStatus(orderNode.path("ordStatus").asText());
+
+                    System.out.println("Table: order. Action: UPDATE. " + order);
+                }
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (NullPointerException e) {
+            logger.error("Received invalid order data: " + message);
+        }
+}}
 
 

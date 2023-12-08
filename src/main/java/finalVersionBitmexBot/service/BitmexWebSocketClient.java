@@ -1,9 +1,6 @@
 package finalVersionBitmexBot.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
-import finalVersionBitmexBot.model.order.Order;
 import finalVersionBitmexBot.model.util.Endpoints;
 import finalVersionBitmexBot.model.util.JsonParser;
 import finalVersionBitmexBot.model.util.OrderPriceOnlineGetter;
@@ -23,30 +20,24 @@ public class BitmexWebSocketClient {
     private final SignatureService signatureService = new SignatureServiceImpl();
     private static final Logger logger = LogManager.getLogger(BitmexWebSocketClient.class);
 
-    public void createSession() {
-        try {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
-            URI uri = new URI(Endpoints.BASE_TEST_URL_WEBSOCKET);
-
-            try {
-                container.connectToServer(bitmexWebSocketClient, uri);
-            } catch (DeploymentException | IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-        } catch (URISyntaxException e) {
-            logger.error(e.getMessage());
-        }
+    public void subscribeToOrderBook10() {
+        // подписка по которой смотрю цену онлайн. Спред считает
+        subscribe("orderBook10:XBTUSD");
     }
 
-    public void createSessionAndSubscribeToOrder() {
+    public void subscribeToPosition() {
+        //подписка которая мониторит мои открытые позиции. в том числе и тиках и если закрыто/ Раз в секунду дает тик
+        subscribe("position");
+    }
+
+    public void subscribeToOrder() {
+        // подписка которая мониторит изменения в лимитных отложенных ордерах
+        subscribe("order");
+    }
+
+    // ИСПРАВИТЬ ВРЕМЯ РАБОТЫ ПРОГРААММЫ!!!
+    private void subscribe(String subscriptionType) {
+        // само выполнение метода надо зациклить.
         try {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient();
@@ -58,15 +49,12 @@ public class BitmexWebSocketClient {
                 Map<String, Object> subscription = new HashMap<>();
                 subscription.put("op", "subscribe");
 
-//                subscription.put("args", "orderBook10:XBTUSD"); // подписка по которой смотрю цену онлайн. Спред считает
-//                subscription.put("args", "position"); // подписка которая мониторит мои открытые позиции.
-//                subscription.put("args", "order"); // подписка которая мониторит изменения в лимитных отложенных ордерах
-                subscription.put("args", "position"); // О подписка которая мониторит мои открытые позиции. в том числе и тиках и если закрыто
+                subscription.put("args", subscriptionType);
 
                 String json = JsonParser.toJson(subscription);
                 session.getBasicRemote().sendText(json);
 
-                Thread.sleep(130000);
+                Thread.sleep(50000);  // ВОТ ТУТ ПОКА УПРАВЛЯТЬ ВРЕМЕНЕМ РАБОТЫ ПРОГРАММЫ!!!
 
                 session.close();
 
@@ -97,7 +85,7 @@ public class BitmexWebSocketClient {
     @OnMessage
     public void onMessage(String message, Session session) {
         if (message.contains("\"table\":\"order\",\"action\":\"update\",\"data\":")) {
-            parseOrderWithId(message);
+            JsonParser.parseOrderWithId(message);
         }
         if (message.contains("\"table\":\"orderBook10\",\"action\":\"update\"")) {
             OrderPriceOnlineGetter.getPriceBetweenBidAsk(message);
@@ -110,49 +98,19 @@ public class BitmexWebSocketClient {
         System.out.println("Disconnected. Reason: " + closeReason.getReasonPhrase());
     }
 
-    private void parseOrderWithId(String message) {
+    public void createSession() {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(message);
+            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+            BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
+            URI uri = new URI(Endpoints.BASE_TEST_URL_WEBSOCKET);
 
-            JsonNode dataNode = jsonNode.get("data");
-            if (dataNode != null && dataNode.isArray() && dataNode.size() > 0) {
-                for (JsonNode orderNode : dataNode) {
-                    String orderID = orderNode.path("orderID").asText();
-                    String action = jsonNode.get("action").asText();
-
-                    System.out.println("orderID: " + orderID + ", action: " + action);
-                }
+            try {
+                container.connectToServer(bitmexWebSocketClient, uri);
+            } catch (DeploymentException | IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
+        } catch (URISyntaxException e) {
             logger.error(e.getMessage());
-        }
-    }
-
-    private void parseOrderWithIdSymbolSidePrice(String message) {
-        Order order;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(message);
-
-            JsonNode dataNode = jsonNode.get("data");
-            if (dataNode != null && dataNode.isArray() && dataNode.size() > 0) {
-                for (JsonNode orderNode : dataNode) {
-                    order = new Order("", "", 0., 0., "");
-                    order.setOrderID(orderNode.path("orderID").asText());
-                    order.setSymbol(orderNode.path("symbol").asText());
-                    order.setSide(orderNode.path("side").asText());
-                    order.setOrderQty(orderNode.path("orderQty").asDouble());
-                    order.setPrice(orderNode.path("price").asDouble());
-                    order.setOrdStatus(orderNode.path("ordStatus").asText());
-
-                    System.out.println("Table: order. Action: UPDATE. " + order);
-                }
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        } catch (NullPointerException e) {
-            logger.error("Received invalid order data: " + message);
         }
     }
 }
