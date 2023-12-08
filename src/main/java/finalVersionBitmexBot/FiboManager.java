@@ -69,20 +69,14 @@ public class FiboManager {
         return props;
     }
 
-
-    //выставить ордер в бай или селл
     public void createFirstOrder() {
-
-        double firstOrderPrice = OrderPriceOnlineGetter.priceForNewOrder;
-        //запустить поток дождаться тика и когда будет != null то открыть ордер
-
 //        String orderSide = RandomOrderSideGenerator.generateRandomSide(); //случайное Бай или селл
-        String orderSide = "Sell";
+        String orderSide = "Sell";  // ПРОВЕРИТЬ! РАБОТАЕТ ТОЛЬКО СЕЛЛ
         List<Integer> netIntParams = loadIntNetParamsFromProps();
         List<String> netStringParams = loadStringNetParamsFromProps();
         List<Double> netDoubleParams = loadDoubleNetParamsFromProps();
 
-        // открыть лимитник битмексХТТПлиент открыть ордер. и сделать метод БЕЗ пропертис.
+        double firstOrderPrice = OrderPriceOnlineGetter.priceForNewOrder;
 
         orderService.openOrder(orderService.createJsonOrder(netStringParams.get(0), orderSide, netDoubleParams.get(0), firstOrderPrice, netStringParams.get(1)));
 
@@ -93,8 +87,36 @@ public class FiboManager {
     }
 
     private void createNetAfterFistOrder(Order firstOrder, Integer orderStep, Integer orderCoef, Integer orderLevel) {
-        System.out.println("CЕТКА ХУЕТКА! ");
-        //выставить сетку ордеров на основе параметров
 
+        String symbol = firstOrder.getSymbol();
+        String side = firstOrder.getSide();
+        double orderQty = firstOrder.getOrderQty();
+        double price = firstOrder.getPrice();
+        String ordType = firstOrder.getOrdType();
+        int[] fiboNumbers = generateFibonacci(orderLevel);
+
+        for (int i = 0; i < orderLevel; i++) {
+            orderQty = fiboNumbers[i] * orderQty;
+            price = price - (fiboNumbers[i] * orderStep);
+
+            orderService.openOrder(orderService.createJsonOrder(symbol, side, orderQty, price, ordType));
+        }
+    }
+
+    public static int[] generateFibonacci(int count) {
+        if (count <= 0) {
+            throw new IllegalArgumentException("Количество чисел должно быть положительным");
+        }
+
+        int[] fibonacciArray = new int[count];
+        fibonacciArray[0] = 0;
+
+        if (count > 1) {
+            fibonacciArray[1] = 1;
+            for (int i = 2; i < count; i++) {
+                fibonacciArray[i] = fibonacciArray[i - 1] + fibonacciArray[i - 2];
+            }
+        }
+        return fibonacciArray;
     }
 }
