@@ -4,8 +4,8 @@ import finalVersionBitmexBot.model.util.OrderPriceOnlineGetter;
 
 public class App {
     public static void main(String[] args) {
-//        BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
-//        bitmexClient.openOrder(); //work
+//       BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
+//       bitmexClient.openOrder(); //work
 //        bitmexClient.openMarketOrder(); //work
         //      bitmexClient.closeMarketPosition("her"); //work
 //        bitmexClient.getAllOrdersList(); //work

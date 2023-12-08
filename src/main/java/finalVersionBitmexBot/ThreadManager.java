@@ -15,8 +15,6 @@ public class ThreadManager {
         subscribeToOrderBook10.start();
         orderPriceOnlineGetterInfoTask.start();
 
-        // когда гетер перетсанет быть = 0 вызвать фибо менеджер - открытие ордера
-
 //        subscribeToOrder.start();
 //        subscribeToPosition.start();
     }

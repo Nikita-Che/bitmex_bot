@@ -87,7 +87,6 @@ public class FiboManager {
     }
 
     private void createNetAfterFistOrder(Order firstOrder, Integer orderStep, Integer orderCoef, Integer orderLevel) {
-
         String symbol = firstOrder.getSymbol();
         String side = firstOrder.getSide();
         double orderQty = firstOrder.getOrderQty();
@@ -95,7 +94,7 @@ public class FiboManager {
         String ordType = firstOrder.getOrdType();
         int[] fiboNumbers = generateFibonacci(orderLevel);
 
-        for (int i = 0; i < orderLevel; i++) {
+        for (int i = 1; i < orderLevel; i++) {
             orderQty = fiboNumbers[i] * orderQty;
             price = price - (fiboNumbers[i] * orderStep);
 

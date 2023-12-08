@@ -54,7 +54,7 @@ public class BitmexWebSocketClient {
                 String json = JsonParser.toJson(subscription);
                 session.getBasicRemote().sendText(json);
 
-                Thread.sleep(30000);  // ВОТ ТУТ ПОКА УПРАВЛЯТЬ ВРЕМЕНЕМ РАБОТЫ ПРОГРАММЫ!!!
+                Thread.sleep(60000);  // ВОТ ТУТ ПОКА УПРАВЛЯТЬ ВРЕМЕНЕМ РАБОТЫ ПРОГРАММЫ!!!
 
                 session.close();
 
