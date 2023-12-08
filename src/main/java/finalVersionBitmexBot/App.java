@@ -20,7 +20,6 @@ public class App {
 //        bitmexClient.closeOrder("23123"); //work
 //        bitmexClient.closeOrder("deb1e8e2-89bd-425f-adb9-88d6d7f16901"); //work
 //        bitmexClient.chooseOrderToClose();//work
-//
 
 //        BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient(); //work
 //        bitmexWebSocketClient.subscribeToOrderBook10();
@@ -32,7 +31,7 @@ public class App {
         boolean flag = true;
         while (flag) {
             if (OrderPriceOnlineGetter.priceForNewOrder == 0) {
-                System.out.println("ХУЙ");
+                System.out.println("WAITING for price Update");
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -41,6 +40,7 @@ public class App {
             } else {
                 FiboManager fiboManager = new FiboManager();
                 fiboManager.createFirstOrder();
+
                 flag = false;
             }
         }
