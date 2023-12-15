@@ -4,11 +4,10 @@ apiSecret=bv3Z35DKSh7No26QZfYGsx75QBwo8KasCpkD2hKDJ5yLmd7v
 symbol=XBTUSD
 side=Buy
 orderQty=100.
-price=43900.
+price=41900.
 ordType=Limit
 
 ordTypeMarket=Market
-
 
 netOrderSymbol=XBTUSD
 netOrderStep=10

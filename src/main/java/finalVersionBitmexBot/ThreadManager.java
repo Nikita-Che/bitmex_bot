@@ -3,43 +3,56 @@ package finalVersionBitmexBot;
 import finalVersionBitmexBot.model.util.OrderPriceOnlineGetter;
 import finalVersionBitmexBot.service.BitmexWebSocketClient;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ThreadManager {
     BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient();
+    public static volatile boolean running = true;
 
     public void startSubscriptions() {
-        Thread subscribeToOrderBook10 = new Thread(this::subscribeToOrderBook10);
-        Thread orderPriceOnlineGetterInfoTask = new Thread(this::orderPriceOnlineGetterInfoTask);
-        Thread subscribeToOrder = new Thread(this::subscribeToOrder);
-        Thread subscribeToPosition = new Thread(this::subscribeToPosition);
+        ExecutorService service = Executors.newFixedThreadPool(4);
+        service.execute(new SubscribeToOrderBook10());
+        service.execute(new OrderPriceOnlineGetterInfoTask());
+//        service.execute(new SubscribeToToPosition());
+//        service.execute(new SubscribeToToOrder());
 
-        subscribeToOrderBook10.start();
-        orderPriceOnlineGetterInfoTask.start();
-
-//        subscribeToOrder.start();
-//        subscribeToPosition.start();
+        service.shutdown();
     }
 
-    public void startOrderPriceOnlineGetterInfoTaskThread () {
-        Thread orderPriceOnlineGetterInfoTask = new Thread(this::orderPriceOnlineGetterInfoTask);
-        orderPriceOnlineGetterInfoTask.start();
-        if(OrderPriceOnlineGetter.priceForNewOrder!=0){
-            orderPriceOnlineGetterInfoTask.interrupt();
+    class SubscribeToOrderBook10 implements Runnable {
+        @Override
+        public void run() {
+            while (running) {
+                bitmexWebSocketClient.subscribeToOrderBook10();
+            }
         }
     }
 
-    public void orderPriceOnlineGetterInfoTask (){
-        OrderPriceOnlineGetter.orderPriceOnlineGetterInfoTaskForConsole();
+    static class OrderPriceOnlineGetterInfoTask implements Runnable {
+        @Override
+        public void run() {
+            while (running) {
+                OrderPriceOnlineGetter.orderPriceOnlineGetterInfoTaskForConsole();
+            }
+        }
     }
 
-    public void subscribeToOrderBook10(){
-        bitmexWebSocketClient.subscribeToOrderBook10();
+    class SubscribeToToOrder implements Runnable {
+        @Override
+        public void run() {
+            while (running) {
+                bitmexWebSocketClient.subscribeToOrder();
+            }
+        }
     }
 
-    public void subscribeToOrder(){
-        bitmexWebSocketClient.subscribeToOrder();
-    }
-
-    public void subscribeToPosition(){
-        bitmexWebSocketClient.subscribeToPosition();
+    class SubscribeToToPosition implements Runnable {
+        @Override
+        public void run() {
+            while (running) {
+                bitmexWebSocketClient.subscribeToPosition();
+            }
+        }
     }
 }

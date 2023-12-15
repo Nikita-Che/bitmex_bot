@@ -1,7 +1,5 @@
 package finalVersionBitmexBot;
 
-import finalVersionBitmexBot.model.util.OrderPriceOnlineGetter;
-
 public class App {
     public static void main(String[] args) {
 //       BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
@@ -28,22 +26,28 @@ public class App {
         ThreadManager threadManager = new ThreadManager();
         threadManager.startSubscriptions();
 
-        boolean flag = true;
-        while (flag) {
-            if (OrderPriceOnlineGetter.priceForNewOrder == 0) {
-                System.out.println("WAITING for price Update");
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                FiboManager fiboManager = new FiboManager();
-                fiboManager.createFirstOrder();
-
-                flag = false;
-            }
-        }
+//        boolean flag = true;
+//        while (flag) {
+//            for (int i = 0; i < 10; i++) {
+//                if (OrderPriceOnlineGetter.priceForNewOrder == 0) {
+//                    System.out.println("WAITING for price Update");
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                } else {
+//                    FiboManager fiboManager = new FiboManager();
+//                    fiboManager.createFirstOrder();
+//
+//                    flag = false;
+//                }
+//            }
+//            flag = false;
+//        }
+//        OrderPriceOnlineGetter.priceForNewOrder = 42870.;
+//        FiboManager fiboManager = new FiboManager();
+//        fiboManager.createFirstOrder();
     }
 }
 

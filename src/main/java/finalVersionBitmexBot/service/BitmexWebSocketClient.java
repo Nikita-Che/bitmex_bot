@@ -1,5 +1,6 @@
 package finalVersionBitmexBot.service;
 
+import finalVersionBitmexBot.ThreadManager;
 import finalVersionBitmexBot.model.authentification.AuthenticationHeaders;
 import finalVersionBitmexBot.model.util.Endpoints;
 import finalVersionBitmexBot.model.util.JsonParser;
@@ -54,17 +55,19 @@ public class BitmexWebSocketClient {
                 String json = JsonParser.toJson(subscription);
                 session.getBasicRemote().sendText(json);
 
-                Thread.sleep(60000);  // ВОТ ТУТ ПОКА УПРАВЛЯТЬ ВРЕМЕНЕМ РАБОТЫ ПРОГРАММЫ!!!
-
+                while (ThreadManager.running) {
+                }
+                // ВОТ ТУТ ПОКА УПРАВЛЯТЬ ВРЕМЕНЕМ РАБОТЫ ПРОГРАММЫ!!!
                 session.close();
-
-            } catch (DeploymentException | IOException | InterruptedException e) {
+            } catch (DeploymentException | IOException e) {
                 throw new RuntimeException(e);
+
             }
 
         } catch (URISyntaxException e) {
             logger.error(e.getMessage());
         }
+
     }
 
     @OnOpen

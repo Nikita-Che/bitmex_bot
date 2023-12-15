@@ -2,6 +2,7 @@ package finalVersionBitmexBot.model.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import finalVersionBitmexBot.ThreadManager;
 import finalVersionBitmexBot.service.BitmexWebSocketClient;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
@@ -39,7 +40,7 @@ public class OrderPriceOnlineGetter {
     public static void orderPriceOnlineGetterInfoTaskForConsole() {
         double lastCheckedPrice = OrderPriceOnlineGetter.priceForNewOrder;
 
-        while (true) {
+        while (ThreadManager.running) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
