@@ -8,6 +8,7 @@ import java.util.List;
 public interface OrderRepository {
     Order getOrderById(String orderID) throws OrderNotFoundException;
     
+    List<Order> getLimitOrdersList();
     List<Order> getOpenOrdersList();
     List<Order> getAllOrdersList();
 

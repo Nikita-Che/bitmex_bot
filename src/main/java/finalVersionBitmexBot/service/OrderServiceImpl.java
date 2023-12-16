@@ -66,12 +66,40 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public String getOpenPosition() {
+        String verb = "GET";
+        String uri = Endpoints.BASE_TEST_URL
+                + Endpoints.BASE_TEST_URL_SECOND_PART
+                + Endpoints.POSITION_ENDPOINT;
+
+        HttpClient httpClient = HttpClient.newBuilder().build();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .header("api-expires", String.valueOf(authenticationHeaders.getExpires()))
+                .header("api-key", authenticationHeaders.getApiKey())
+                .header("api-signature", signatureService.createSignatureForOrdersList(verb, uri, ""))
+                .build();
+
+        HttpResponse<String> send = null;
+        try {
+            send = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        String order = send.body(); // Полученный JSON с открытыми позициями
+        System.out.println(order);
+        logger.info(JsonParser.extractOrderIDfromString(order) + " open position was get");
+        return order;
+    }
+
+    @Override
     public List<Order> getAllOrdersList() {
         String verb = "GET";
         String uri = Endpoints.BASE_TEST_URL
                 + Endpoints.BASE_TEST_URL_SECOND_PART
                 + Endpoints.ORDER_ENDPOINT
-                + Endpoints.COUNT_100_REVERSE_FALSE;
+                + Endpoints.COUNT_10_REVERSE_TRUE;
 
         HttpClient httpClient = HttpClient.newBuilder().build();
         HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -94,6 +122,12 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.init(orders);
         logger.info("all OrderList получено нах");
         return orders;
+    }
+
+    @Override
+    public List<Order> getLimitOrdersList() {
+        logger.info("all LimitOrderList получено нах");
+        return orderRepository.getLimitOrdersList();
     }
 
     @Override
@@ -131,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
     public void chooseOrderToClose() {
         orderRepository.init(getAllOrdersList());  // инит сделан для теста
 
-        List<Order> openOrders = orderRepository.getOpenOrdersList();
+        List<Order> openOrders = orderRepository.getLimitOrdersList();
         for (Order openOrder : openOrders) {
             System.out.println(openOrder.getOrderID());
         }
@@ -211,7 +245,7 @@ public class OrderServiceImpl implements OrderService {
 
     public Order getOrderById(String orderId) {
         try {
-            logger.info("Order get "+ orderId);
+            logger.info("Order get " + orderId);
             return orderRepository.getOrderById(orderId);
         } catch (OrderNotFoundException e) {
             throw new RuntimeException(e);

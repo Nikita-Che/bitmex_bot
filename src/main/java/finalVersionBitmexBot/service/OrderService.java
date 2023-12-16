@@ -16,7 +16,10 @@ public interface OrderService {
 
     List<Order> getAllOrdersList();
 
+    List<Order> getLimitOrdersList();
     List<Order> getOpenOrdersList();
+
+    String getOpenPosition();
 
     void closeAllOrders();
 

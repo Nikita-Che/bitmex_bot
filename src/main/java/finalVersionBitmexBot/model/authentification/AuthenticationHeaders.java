@@ -17,6 +17,7 @@ public class AuthenticationHeaders {
         try {
             properties.load(new FileInputStream("D:\\Java\\repo\\bitmex_bot\\properties.props"));
 //            properties.load(new FileInputStream("C:\\Users\\nikita\\Desktop\\GitHub\\bitmex_bot\\properties.props"));
+
             apiKey = properties.getProperty("apiKey");
             apiSecret = properties.getProperty("apiSecret");
         } catch (IOException e) {

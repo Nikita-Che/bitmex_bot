@@ -16,6 +16,8 @@ public class BitmexHTTPClientImpl implements BitmexHTTPClient {
 
     @Override
     public void openOrder() {
+        // TODO: 16.12.2023    // открыть ордера. Список id и цена ордера попадает в список. В сервлете в отдельной влкдке я вижу список ордеров
+        //    //могу эти ордера модифицировать или закрыть.
         List<String> props = loadFromProps();
         String orderJson = orderService.createJsonOrder(props.get(0),
                 props.get(1),
@@ -67,10 +69,22 @@ public class BitmexHTTPClientImpl implements BitmexHTTPClient {
     }
 
     @Override
+    public List<Order> getLimitOrdersList() {
+        getAllOrdersList();
+        List<Order> openOrdersList = orderService.getLimitOrdersList();
+        return openOrdersList;
+    }
+
+    @Override
     public List<Order> getOpenOrdersList() {
         getAllOrdersList();
         List<Order> openOrdersList = orderService.getOpenOrdersList();
         return openOrdersList;
+    }
+
+    @Override
+    public String getOpenPosition() {
+        return orderService.getOpenPosition();
     }
 
     private List<String> loadFromProps() {

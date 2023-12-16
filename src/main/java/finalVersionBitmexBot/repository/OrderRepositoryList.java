@@ -35,10 +35,27 @@ public class OrderRepositoryList implements OrderRepository {
     }
 
     @Override
+    public List<Order> getLimitOrdersList() {
+        List<Order> limitOrdersList = new ArrayList<>();
+        System.out.println("All Limits orders");
+        for (Order order : orders) {
+            // Условия для лимитного ордера
+            if (order.getOrdStatus().equals("New") && order.getLeavesQty() > 0) {
+                limitOrdersList.add(order);
+            }
+        }
+        return limitOrdersList;
+    }
+
+    @Override
     public List<Order> getOpenOrdersList() {
         List<Order> opeOrdersList = new ArrayList<>();
+        System.out.println("All Opened orders");
         for (Order order : orders) {
-            if (order.getOrdStatus().equalsIgnoreCase("new")) {
+            // Условия для открытой позиции
+            if (order.getOrdStatus().equalsIgnoreCase("Filled")
+                    && order.getLeavesQty() == 0
+                    && order.getCumQty() > 0) {
                 opeOrdersList.add(order);
             }
         }
