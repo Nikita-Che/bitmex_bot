@@ -36,9 +36,8 @@ public class BitmexWebSocketClient {
         subscribe("order");
     }
 
-    // ИСПРАВИТЬ ВРЕМЯ РАБОТЫ ПРОГРААММЫ!!!
+
     private void subscribe(String subscriptionType) {
-        // само выполнение метода надо зациклить.
         try {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             BitmexWebSocketClient bitmexWebSocketClient = new BitmexWebSocketClient();

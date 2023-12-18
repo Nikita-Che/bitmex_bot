@@ -93,6 +93,32 @@ public class JsonParser {
         } catch (NullPointerException e) {
             logger.error("Received invalid order data: " + message);
         }
-}}
+    }
+
+    public static void checkOpenPosition(String jsonString) {
+        int isOpenIndex = jsonString.indexOf("\"isOpen\":true");
+
+        if (isOpenIndex != -1) {
+            System.out.println("Открытая позиция avgCostPrice = 41141.5");
+        } else {
+            int isOpenFalseIndex = jsonString.indexOf("\"isOpen\":false");
+            if (isOpenFalseIndex != -1) {
+                System.out.println("Открытых позиций нет");
+            }
+        }
+    }
+
+    public static void checkLimitOrders(String jsonString) {
+        int buyOrderQtyIndex = jsonString.indexOf("\"openOrderBuyQty\":0");
+        int sellOrderQtyIndex = jsonString.indexOf("\"openOrderSellQty\":0");
+
+        if (buyOrderQtyIndex != -1 && sellOrderQtyIndex != -1) {
+            System.out.println("Лимитных ордеров нет");
+        } else {
+            System.out.println("Есть лимитные ордеры");
+        }
+    }
+
+}
 
 

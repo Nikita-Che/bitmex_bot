@@ -1,12 +1,15 @@
 package finalVersionBitmexBot;
 
+import finalVersionBitmexBot.model.util.JsonParser;
 import finalVersionBitmexBot.service.BitmexHTTPClient;
 import finalVersionBitmexBot.service.BitmexHTTPClientImpl;
 
 public class App {
     public static void main(String[] args) {
        BitmexHTTPClient bitmexClient = new BitmexHTTPClientImpl();
-       bitmexClient.getOpenPosition();
+        JsonParser.checkOpenPosition(bitmexClient.getOpenPosition());
+        JsonParser.checkLimitOrders(bitmexClient.getOpenPosition());
+
 //       bitmexClient.openOrder(); //work
 //        bitmexClient.openMarketOrder(); //work
         //      bitmexClient.closeMarketPosition("her"); //work
@@ -39,10 +42,9 @@ public class App {
 
 //        ThreadManager threadManager = new ThreadManager();
 //        threadManager.startSubscriptions();
-
+//
 //        boolean flag = true;
 //        while (flag) {
-//            for (int i = 0; i < 10; i++) {
 //                if (OrderPriceOnlineGetter.priceForNewOrder == 0) {
 //                    System.out.println("WAITING for price Update");
 //                    try {
@@ -53,12 +55,11 @@ public class App {
 //                } else {
 //                    FiboManager fiboManager = new FiboManager();
 //                    fiboManager.createFirstOrder();
-//
 //                    flag = false;
 //                }
-//            }
-//            flag = false;
 //        }
+
+
 //        OrderPriceOnlineGetter.priceForNewOrder = 42870.;
 //        FiboManager fiboManager = new FiboManager();
 //        fiboManager.createFirstOrder();

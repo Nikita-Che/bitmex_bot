@@ -77,7 +77,7 @@ public class FiboManager {
 
         double firstOrderPrice = OrderPriceOnlineGetter.priceForNewOrder;
 
-        orderService.openOrder(orderService.createJsonOrder(netStringParams.get(0), orderSide, netDoubleParams.get(0), 42230, netStringParams.get(1)));
+        orderService.openOrder(orderService.createJsonOrder(netStringParams.get(0), orderSide, netDoubleParams.get(0), firstOrderPrice, netStringParams.get(1)));
 
 //        Order firstOrder = new Order(netStringParams.get(0), orderSide, netDoubleParams.get(0), firstOrderPrice, netStringParams.get(1));
 //        // получить этот ордер обратно открытый из сообщения и прокинуть в createNetAfterFistOrder

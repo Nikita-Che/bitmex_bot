@@ -88,7 +88,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
         String order = send.body(); // Полученный JSON с открытыми позициями
-        System.out.println(order);
         logger.info(JsonParser.extractOrderIDfromString(order) + " open position was get");
         return order;
     }
